@@ -39,8 +39,9 @@ chain = prompt | llm
 merchant_text = "\n".join([f"- {m}" for m in merchants])
 
 # Get classified response
-response = chain.run(merchant_list=merchant_text)
-print("LLM Output:\n", response)
+response = chain.invoke({"merchant_list": merchant_text})
+response_text = response.content
+print("LLM Output:\n", response_text)
 
 # Convert model output to dataframe
 lines = [x.strip() for x in response.split("\n") if "," in x]
