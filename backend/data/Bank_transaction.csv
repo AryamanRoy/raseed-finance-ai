@@ -1,0 +1,563 @@
+Date,Receiver Name,Amount,Mode of Transaction
+01-02-2025,Rajesh Sharma,15342,Bank Transfer
+01-02-2025,Domino's,699,UPI
+01-02-2025,Netflix,649,Credit Card
+01-02-2025,Ajio,1899,Credit Card
+01-02-2025,Tata Power,1734,Net Banking
+01-02-2025,Uber,420,Credit Card
+01-02-2025,Big Bazaar,2410,Debit Card
+02-02-2025,Swiggy,512,UPI
+02-02-2025,Amazon,2299,Credit Card
+02-02-2025,Airtel,899,UPI
+02-02-2025,Friend Ravi,3500,UPI
+02-02-2025,Starbucks,340,Debit Card
+03-02-2025,IRCTC,1560,UPI
+03-02-2025,Reliance Store,1850,Debit Card
+03-02-2025,Tata Sky,450,UPI
+03-02-2025,McDonald's,640,UPI
+03-02-2025,Gym World,2000,UPI
+04-02-2025,Flipkart,2799,Credit Card
+04-02-2025,Swiggy,480,UPI
+04-02-2025,Amazon,1299,Credit Card
+04-02-2025,Domino's,520,UPI
+05-02-2025,Uber,350,Credit Card
+05-02-2025,BESCOM,2320,Net Banking
+05-02-2025,Pantaloons,2190,Credit Card
+05-02-2025,Friend Karan,3000,UPI
+06-02-2025,Big Bazaar,3050,Debit Card
+06-02-2025,Zomato,560,UPI
+06-02-2025,Hotstar,499,Credit Card
+06-02-2025,Ajio,1499,Credit Card
+07-02-2025,Ola Cabs,410,UPI
+07-02-2025,Karnataka Water,1200,Net Banking
+07-02-2025,Starbucks,370,Debit Card
+08-02-2025,Amazon,2199,Credit Card
+08-02-2025,Swiggy,460,UPI
+08-02-2025,Shell Petrol,1800,Debit Card
+08-02-2025,McDonald's,710,UPI
+09-02-2025,Tata Power,1750,Net Banking
+09-02-2025,Flipkart,2999,Credit Card
+09-02-2025,Domino's,590,UPI
+10-02-2025,Uber,430,Credit Card
+10-02-2025,Big Bazaar,2890,Debit Card
+10-02-2025,Netflix,649,Credit Card
+11-02-2025,Airtel,899,UPI
+11-02-2025,Pantaloons,2290,Credit Card
+11-02-2025,Swiggy,520,UPI
+12-02-2025,IRCTC,1620,UPI
+12-02-2025,Reliance Store,2100,Debit Card
+12-02-2025,Zomato,540,UPI
+13-02-2025,Tata Sky,450,UPI
+13-02-2025,Ajio,1599,Credit Card
+13-02-2025,Starbucks,360,Debit Card
+14-02-2025,McDonald's,690,UPI
+14-02-2025,Amazon,2399,Credit Card
+14-02-2025,Ola Cabs,380,UPI
+15-02-2025,Gym World,2000,UPI
+15-02-2025,Friend Ravi,2500,UPI
+15-02-2025,Big Bazaar,3180,Debit Card
+16-02-2025,Flipkart,2699,Credit Card
+16-02-2025,Swiggy,480,UPI
+16-02-2025,Uber,370,Credit Card
+17-02-2025,Hotstar,499,Credit Card
+17-02-2025,BESCOM,2350,Net Banking
+17-02-2025,Domino's,610,UPI
+18-02-2025,Reliance Store,1950,Debit Card
+18-02-2025,Amazon,1299,Credit Card
+18-02-2025,Starbucks,340,Debit Card
+19-02-2025,IRCTC,1490,UPI
+19-02-2025,Airtel,899,UPI
+19-02-2025,McDonald's,720,UPI
+20-02-2025,Ajio,1399,Credit Card
+20-02-2025,Swiggy,530,UPI
+20-02-2025,Uber,420,Credit Card
+21-02-2025,Big Bazaar,2750,Debit Card
+21-02-2025,Domino's,540,UPI
+21-02-2025,Flipkart,2599,Credit Card
+22-02-2025,Tata Power,1820,Net Banking
+22-02-2025,Zomato,560,UPI
+22-02-2025,Pantaloons,2050,Credit Card
+23-02-2025,Ola Cabs,410,UPI
+23-02-2025,Starbucks,330,Debit Card
+23-02-2025,Amazon,2199,Credit Card
+24-02-2025,Reliance Store,1980,Debit Card
+24-02-2025,Swiggy,520,UPI
+24-02-2025,McDonald's,650,UPI
+25-02-2025,Tata Sky,450,UPI
+25-02-2025,Ajio,1699,Credit Card
+25-02-2025,Uber,360,Credit Card
+26-02-2025,IRCTC,1510,UPI
+26-02-2025,Big Bazaar,2850,Debit Card
+26-02-2025,Domino's,580,UPI
+27-02-2025,Airtel,899,UPI
+27-02-2025,Flipkart,2799,Credit Card
+27-02-2025,Starbucks,350,Debit Card
+28-02-2025,Company Salary,45000,Bank Transfer
+28-02-2025,Zomato,520,UPI
+28-02-2025,Amazon,2399,Credit Card
+01-03-2025,Rajesh Sharma,16050,Bank Transfer
+01-03-2025,Netflix,649,Credit Card
+01-03-2025,Swiggy,510,UPI
+01-03-2025,Big Bazaar,3000,Debit Card
+02-03-2025,Uber,380,Credit Card
+02-03-2025,BESCOM,2325,Net Banking
+02-03-2025,Domino's,560,UPI
+03-03-2025,Flipkart,2999,Credit Card
+03-03-2025,Starbucks,340,Debit Card
+03-03-2025,IRCTC,1580,UPI
+04-03-2025,Amazon,2199,Credit Card
+04-03-2025,Swiggy,530,UPI
+04-03-2025,McDonald's,680,UPI
+05-03-2025,Tata Power,1760,Net Banking
+05-03-2025,Ajio,1499,Credit Card
+05-03-2025,Ola Cabs,400,UPI
+06-03-2025,Reliance Store,2050,Debit Card
+06-03-2025,Domino's,610,UPI
+06-03-2025,Hotstar,499,Credit Card
+07-03-2025,Amazon,2399,Credit Card
+07-03-2025,Starbucks,360,Debit Card
+07-03-2025,IRCTC,1620,UPI
+08-03-2025,BESCOM,2350,Net Banking
+08-03-2025,Swiggy,520,UPI
+08-03-2025,Pantaloons,2190,Credit Card
+09-03-2025,Uber,410,Credit Card
+09-03-2025,McDonald's,640,UPI
+09-03-2025,Big Bazaar,3150,Debit Card
+10-03-2025,Airtel,899,UPI
+10-03-2025,Flipkart,2599,Credit Card
+10-03-2025,Domino's,540,UPI
+11-03-2025,Ajio,1699,Credit Card
+11-03-2025,Swiggy,510,UPI
+11-03-2025,Uber,420,Credit Card
+12-03-2025,Tata Sky,450,UPI
+12-03-2025,Starbucks,330,Debit Card
+12-03-2025,Amazon,2299,Credit Card
+13-03-2025,IRCTC,1490,UPI
+13-03-2025,Reliance Store,1980,Debit Card
+13-03-2025,Zomato,560,UPI
+14-03-2025,BESCOM,2320,Net Banking
+14-03-2025,Flipkart,2799,Credit Card
+14-03-2025,Domino's,580,UPI
+15-03-2025,Big Bazaar,2890,Debit Card
+15-03-2025,McDonald's,690,UPI
+15-03-2025,Ola Cabs,380,UPI
+16-03-2025,Amazon,2199,Credit Card
+16-03-2025,Swiggy,520,UPI
+16-03-2025,Starbucks,350,Debit Card
+17-03-2025,Tata Power,1820,Net Banking
+17-03-2025,Ajio,1599,Credit Card
+17-03-2025,Uber,360,Credit Card
+18-03-2025,IRCTC,1510,UPI
+18-03-2025,Domino's,560,UPI
+18-03-2025,BESCOM,2350,Net Banking
+19-03-2025,Flipkart,2699,Credit Card
+19-03-2025,Starbucks,340,Debit Card
+19-03-2025,Amazon,2399,Credit Card
+20-03-2025,Swiggy,530,UPI
+20-03-2025,Reliance Store,2050,Debit Card
+20-03-2025,McDonald's,720,UPI
+21-03-2025,Ajio,1399,Credit Card
+21-03-2025,Uber,420,Credit Card
+21-03-2025,Big Bazaar,2750,Debit Card
+22-03-2025,Domino's,540,UPI
+22-03-2025,Airtel,899,UPI
+22-03-2025,Flipkart,2799,Credit Card
+23-03-2025,IRCTC,1580,UPI
+23-03-2025,Starbucks,360,Debit Card
+23-03-2025,Amazon,2199,Credit Card
+24-03-2025,Swiggy,520,UPI
+24-03-2025,BESCOM,2325,Net Banking
+24-03-2025,Big Bazaar,3000,Debit Card
+25-03-2025,Tata Sky,450,UPI
+25-03-2025,Ajio,1499,Credit Card
+25-03-2025,Ola Cabs,400,UPI
+26-03-2025,Reliance Store,2100,Debit Card
+26-03-2025,Domino's,610,UPI
+26-03-2025,Hotstar,499,Credit Card
+27-03-2025,Amazon,2399,Credit Card
+27-03-2025,Starbucks,360,Debit Card
+27-03-2025,IRCTC,1620,UPI
+28-03-2025,Company Salary,45000,Bank Transfer
+28-03-2025,Swiggy,520,UPI
+28-03-2025,Pantaloons,2190,Credit Card
+29-03-2025,Uber,410,Credit Card
+29-03-2025,McDonald's,640,UPI
+29-03-2025,Big Bazaar,3150,Debit Card
+30-03-2025,Airtel,899,UPI
+30-03-2025,Flipkart,2599,Credit Card
+30-03-2025,Domino's,540,UPI
+31-03-2025,Ajio,1699,Credit Card
+31-03-2025,Swiggy,510,UPI
+31-03-2025,Uber,420,Credit Card
+01-04-2025,Rajesh Sharma,15890,Bank Transfer
+01-04-2025,Netflix,649,Credit Card
+01-04-2025,Big Bazaar,2850,Debit Card
+01-04-2025,Amazon,2299,Credit Card
+02-04-2025,Swiggy,530,UPI
+02-04-2025,BESCOM,2320,Net Banking
+02-04-2025,Domino's,560,UPI
+03-04-2025,Flipkart,2799,Credit Card
+03-04-2025,Starbucks,350,Debit Card
+03-04-2025,IRCTC,1560,UPI
+04-04-2025,Ajio,1499,Credit Card
+04-04-2025,Uber,380,Credit Card
+04-04-2025,Reliance Store,1980,Debit Card
+05-04-2025,Tata Power,1760,Net Banking
+05-04-2025,Swiggy,540,UPI
+05-04-2025,McDonald's,680,UPI
+06-04-2025,BESCOM,2350,Net Banking
+06-04-2025,Amazon,2199,Credit Card
+06-04-2025,Hotstar,499,Credit Card
+07-04-2025,Big Bazaar,3000,Debit Card
+07-04-2025,Domino's,610,UPI
+07-04-2025,Flipkart,2999,Credit Card
+08-04-2025,Airtel,899,UPI
+08-04-2025,Ajio,1599,Credit Card
+08-04-2025,Uber,410,Credit Card
+09-04-2025,IRCTC,1620,UPI
+09-04-2025,Starbucks,360,Debit Card
+09-04-2025,Amazon,2399,Credit Card
+10-04-2025,Swiggy,520,UPI
+10-04-2025,Reliance Store,2050,Debit Card
+10-04-2025,McDonald's,720,UPI
+11-04-2025,Ajio,1399,Credit Card
+11-04-2025,Uber,420,Credit Card
+11-04-2025,Big Bazaar,2750,Debit Card
+12-04-2025,Domino's,540,UPI
+12-04-2025,Airtel,899,UPI
+12-04-2025,Flipkart,2799,Credit Card
+13-04-2025,IRCTC,1580,UPI
+13-04-2025,Starbucks,360,Debit Card
+13-04-2025,Amazon,2199,Credit Card
+14-04-2025,Swiggy,520,UPI
+14-04-2025,BESCOM,2325,Net Banking
+14-04-2025,Big Bazaar,3000,Debit Card
+15-04-2025,Tata Sky,450,UPI
+15-04-2025,Ajio,1499,Credit Card
+15-04-2025,Ola Cabs,400,UPI
+16-04-2025,Reliance Store,2100,Debit Card
+16-04-2025,Domino's,610,UPI
+16-04-2025,Hotstar,499,Credit Card
+17-04-2025,Amazon,2399,Credit Card
+17-04-2025,Starbucks,360,Debit Card
+17-04-2025,IRCTC,1620,UPI
+18-04-2025,Company Salary,45000,Bank Transfer
+18-04-2025,Swiggy,520,UPI
+18-04-2025,Pantaloons,2190,Credit Card
+19-04-2025,Uber,410,Credit Card
+19-04-2025,McDonald's,640,UPI
+19-04-2025,Big Bazaar,3150,Debit Card
+20-04-2025,Airtel,899,UPI
+20-04-2025,Flipkart,2599,Credit Card
+20-04-2025,Domino's,540,UPI
+21-04-2025,Ajio,1699,Credit Card
+21-04-2025,Swiggy,510,UPI
+21-04-2025,Uber,420,Credit Card
+22-04-2025,Rajesh Sharma,16120,Bank Transfer
+22-04-2025,Netflix,649,Credit Card
+22-04-2025,Big Bazaar,2850,Debit Card
+22-04-2025,Amazon,2299,Credit Card
+23-04-2025,Swiggy,530,UPI
+23-04-2025,BESCOM,2320,Net Banking
+23-04-2025,Domino's,560,UPI
+24-04-2025,Flipkart,2799,Credit Card
+24-04-2025,Starbucks,350,Debit Card
+24-04-2025,IRCTC,1560,UPI
+25-04-2025,Ajio,1499,Credit Card
+25-04-2025,Uber,380,Credit Card
+25-04-2025,Reliance Store,1980,Debit Card
+26-04-2025,Tata Power,1760,Net Banking
+26-04-2025,Swiggy,540,UPI
+26-04-2025,McDonald's,680,UPI
+27-04-2025,BESCOM,2350,Net Banking
+27-04-2025,Amazon,2199,Credit Card
+27-04-2025,Hotstar,499,Credit Card
+28-04-2025,Big Bazaar,3000,Debit Card
+28-04-2025,Domino's,610,UPI
+28-04-2025,Flipkart,2999,Credit Card
+29-04-2025,Airtel,899,UPI
+29-04-2025,Ajio,1599,Credit Card
+29-04-2025,Uber,410,Credit Card
+30-04-2025,IRCTC,1620,UPI
+30-04-2025,Starbucks,360,Debit Card
+30-04-2025,Amazon,2399,Credit Card
+01-05-2025,Rajesh Sharma,16020,Bank Transfer
+01-05-2025,Netflix,649,Credit Card
+01-05-2025,Swiggy,520,UPI
+01-05-2025,Big Bazaar,3000,Debit Card
+02-05-2025,Uber,380,Credit Card
+02-05-2025,BESCOM,2325,Net Banking
+02-05-2025,Domino's,560,UPI
+03-05-2025,Flipkart,2999,Credit Card
+03-05-2025,Starbucks,340,Debit Card
+03-05-2025,IRCTC,1580,UPI
+04-05-2025,Amazon,2199,Credit Card
+04-05-2025,Swiggy,530,UPI
+04-05-2025,McDonald's,680,UPI
+05-05-2025,Tata Power,1760,Net Banking
+05-05-2025,Ajio,1499,Credit Card
+05-05-2025,Ola Cabs,400,UPI
+06-05-2025,Reliance Store,2050,Debit Card
+06-05-2025,Domino's,610,UPI
+06-05-2025,Hotstar,499,Credit Card
+07-05-2025,Amazon,2399,Credit Card
+07-05-2025,Starbucks,360,Debit Card
+07-05-2025,IRCTC,1620,UPI
+08-05-2025,BESCOM,2350,Net Banking
+08-05-2025,Swiggy,520,UPI
+08-05-2025,Pantaloons,2190,Credit Card
+09-05-2025,Uber,410,Credit Card
+09-05-2025,McDonald's,640,UPI
+09-05-2025,Big Bazaar,3150,Debit Card
+10-05-2025,Airtel,899,UPI
+10-05-2025,Flipkart,2599,Credit Card
+10-05-2025,Domino's,540,UPI
+11-05-2025,Ajio,1699,Credit Card
+11-05-2025,Swiggy,510,UPI
+11-05-2025,Uber,420,Credit Card
+12-05-2025,Tata Sky,450,UPI
+12-05-2025,Starbucks,330,Debit Card
+12-05-2025,Amazon,2299,Credit Card
+13-05-2025,IRCTC,1490,UPI
+13-05-2025,Reliance Store,1980,Debit Card
+13-05-2025,Zomato,560,UPI
+14-05-2025,BESCOM,2320,Net Banking
+14-05-2025,Flipkart,2799,Credit Card
+14-05-2025,Domino's,580,UPI
+15-05-2025,Company Salary,46000,Bank Transfer
+15-05-2025,Big Bazaar,2890,Debit Card
+15-05-2025,McDonald's,690,UPI
+15-05-2025,Ola Cabs,380,UPI
+16-05-2025,Amazon,2199,Credit Card
+16-05-2025,Swiggy,520,UPI
+16-05-2025,Starbucks,350,Debit Card
+17-05-2025,Tata Power,1820,Net Banking
+17-05-2025,Ajio,1599,Credit Card
+17-05-2025,Uber,360,Credit Card
+18-05-2025,IRCTC,1510,UPI
+18-05-2025,Domino's,560,UPI
+18-05-2025,BESCOM,2350,Net Banking
+19-05-2025,Flipkart,2699,Credit Card
+19-05-2025,Starbucks,340,Debit Card
+19-05-2025,Amazon,2399,Credit Card
+20-05-2025,Swiggy,530,UPI
+20-05-2025,Reliance Store,2050,Debit Card
+20-05-2025,McDonald's,720,UPI
+21-05-2025,Ajio,1399,Credit Card
+21-05-2025,Uber,420,Credit Card
+21-05-2025,Big Bazaar,2750,Debit Card
+22-05-2025,Domino's,540,UPI
+22-05-2025,Airtel,899,UPI
+22-05-2025,Flipkart,2799,Credit Card
+23-05-2025,IRCTC,1580,UPI
+23-05-2025,Starbucks,360,Debit Card
+23-05-2025,Amazon,2199,Credit Card
+24-05-2025,Swiggy,520,UPI
+24-05-2025,BESCOM,2325,Net Banking
+24-05-2025,Big Bazaar,3000,Debit Card
+25-05-2025,Tata Sky,450,UPI
+25-05-2025,Ajio,1499,Credit Card
+25-05-2025,Ola Cabs,400,UPI
+26-05-2025,Reliance Store,2100,Debit Card
+26-05-2025,Domino's,610,UPI
+26-05-2025,Hotstar,499,Credit Card
+27-05-2025,Amazon,2399,Credit Card
+27-05-2025,Starbucks,360,Debit Card
+27-05-2025,IRCTC,1620,UPI
+28-05-2025,Company Salary,45000,Bank Transfer
+28-05-2025,Swiggy,520,UPI
+28-05-2025,Pantaloons,2190,Credit Card
+29-05-2025,Uber,410,Credit Card
+29-05-2025,McDonald's,640,UPI
+29-05-2025,Big Bazaar,3150,Debit Card
+30-05-2025,Airtel,899,UPI
+30-05-2025,Flipkart,2599,Credit Card
+30-05-2025,Domino's,540,UPI
+31-05-2025,Ajio,1699,Credit Card
+31-05-2025,Swiggy,510,UPI
+31-05-2025,Uber,420,Credit Card
+01-06-2025,Rajesh Sharma,16200,Bank Transfer
+01-06-2025,Netflix,649,Credit Card
+01-06-2025,Big Bazaar,2850,Debit Card
+01-06-2025,Amazon,2299,Credit Card
+02-06-2025,Swiggy,530,UPI
+02-06-2025,BESCOM,2320,Net Banking
+02-06-2025,Domino's,560,UPI
+03-06-2025,Flipkart,2799,Credit Card
+03-06-2025,Starbucks,350,Debit Card
+03-06-2025,IRCTC,1560,UPI
+04-06-2025,Ajio,1499,Credit Card
+04-06-2025,Uber,380,Credit Card
+04-06-2025,Reliance Store,1980,Debit Card
+05-06-2025,Tata Power,1760,Net Banking
+05-06-2025,Swiggy,540,UPI
+05-06-2025,McDonald's,680,UPI
+06-06-2025,BESCOM,2350,Net Banking
+06-06-2025,Amazon,2199,Credit Card
+06-06-2025,Hotstar,499,Credit Card
+07-06-2025,Big Bazaar,3000,Debit Card
+07-06-2025,Domino's,610,UPI
+07-06-2025,Flipkart,2999,Credit Card
+08-06-2025,Airtel,899,UPI
+08-06-2025,Ajio,1599,Credit Card
+08-06-2025,Uber,410,Credit Card
+09-06-2025,IRCTC,1620,UPI
+09-06-2025,Starbucks,360,Debit Card
+09-06-2025,Amazon,2399,Credit Card
+10-06-2025,Swiggy,520,UPI
+10-06-2025,Reliance Store,2050,Debit Card
+10-06-2025,McDonald's,720,UPI
+11-06-2025,Ajio,1399,Credit Card
+11-06-2025,Uber,420,Credit Card
+11-06-2025,Big Bazaar,2750,Debit Card
+12-06-2025,Domino's,540,UPI
+12-06-2025,Airtel,899,UPI
+12-06-2025,Flipkart,2799,Credit Card
+13-06-2025,IRCTC,1580,UPI
+13-06-2025,Starbucks,360,Debit Card
+13-06-2025,Amazon,2199,Credit Card
+14-06-2025,Swiggy,520,UPI
+14-06-2025,BESCOM,2325,Net Banking
+14-06-2025,Big Bazaar,3000,Debit Card
+15-06-2025,Company Salary,46000,Bank Transfer
+15-06-2025,Tata Sky,450,UPI
+15-06-2025,Ajio,1499,Credit Card
+16-06-2025,Ola Cabs,400,UPI
+16-06-2025,Reliance Store,2100,Debit Card
+16-06-2025,Domino's,610,UPI
+17-06-2025,Hotstar,499,Credit Card
+17-06-2025,Amazon,2399,Credit Card
+17-06-2025,Starbucks,360,Debit Card
+18-06-2025,IRCTC,1620,UPI
+18-06-2025,Swiggy,520,UPI
+18-06-2025,Pantaloons,2190,Credit Card
+19-06-2025,Uber,410,Credit Card
+19-06-2025,McDonald's,640,UPI
+19-06-2025,Big Bazaar,3150,Debit Card
+20-06-2025,Airtel,899,UPI
+20-06-2025,Flipkart,2599,Credit Card
+20-06-2025,Domino's,540,UPI
+21-06-2025,Ajio,1699,Credit Card
+21-06-2025,Swiggy,510,UPI
+21-06-2025,Uber,420,Credit Card
+22-06-2025,Rajesh Sharma,16180,Bank Transfer
+22-06-2025,Netflix,649,Credit Card
+22-06-2025,Big Bazaar,2850,Debit Card
+22-06-2025,Amazon,2299,Credit Card
+23-06-2025,Swiggy,530,UPI
+23-06-2025,BESCOM,2320,Net Banking
+23-06-2025,Domino's,560,UPI
+24-06-2025,Flipkart,2799,Credit Card
+24-06-2025,Starbucks,350,Debit Card
+24-06-2025,IRCTC,1560,UPI
+25-06-2025,Ajio,1499,Credit Card
+25-06-2025,Uber,380,Credit Card
+25-06-2025,Reliance Store,1980,Debit Card
+26-06-2025,Tata Power,1760,Net Banking
+26-06-2025,Swiggy,540,UPI
+26-06-2025,McDonald's,680,UPI
+27-06-2025,BESCOM,2350,Net Banking
+27-06-2025,Amazon,2199,Credit Card
+27-06-2025,Hotstar,499,Credit Card
+28-06-2025,Big Bazaar,3000,Debit Card
+28-06-2025,Domino's,610,UPI
+28-06-2025,Flipkart,2999,Credit Card
+29-06-2025,Airtel,899,UPI
+29-06-2025,Ajio,1599,Credit Card
+29-06-2025,Uber,410,Credit Card
+30-06-2025,IRCTC,1620,UPI
+30-06-2025,Starbucks,360,Debit Card
+30-06-2025,Amazon,2399,Credit Card
+01-07-2025,Rajesh Sharma,16240,Bank Transfer
+01-07-2025,Netflix,649,Credit Card
+01-07-2025,Big Bazaar,2850,Debit Card
+01-07-2025,Amazon,2299,Credit Card
+02-07-2025,Swiggy,530,UPI
+02-07-2025,BESCOM,2320,Net Banking
+02-07-2025,Domino's,560,UPI
+03-07-2025,Flipkart,2799,Credit Card
+03-07-2025,Starbucks,350,Debit Card
+03-07-2025,IRCTC,1560,UPI
+04-07-2025,Ajio,1499,Credit Card
+04-07-2025,Uber,380,Credit Card
+04-07-2025,Reliance Store,1980,Debit Card
+05-07-2025,Tata Power,1760,Net Banking
+05-07-2025,Swiggy,540,UPI
+05-07-2025,McDonald's,680,UPI
+06-07-2025,BESCOM,2350,Net Banking
+06-07-2025,Amazon,2199,Credit Card
+06-07-2025,Hotstar,499,Credit Card
+07-07-2025,Big Bazaar,3000,Debit Card
+07-07-2025,Domino's,610,UPI
+07-07-2025,Flipkart,2999,Credit Card
+08-07-2025,Airtel,899,UPI
+08-07-2025,Ajio,1599,Credit Card
+08-07-2025,Uber,410,Credit Card
+09-07-2025,IRCTC,1620,UPI
+09-07-2025,Starbucks,360,Debit Card
+09-07-2025,Amazon,2399,Credit Card
+10-07-2025,Swiggy,520,UPI
+10-07-2025,Reliance Store,2050,Debit Card
+10-07-2025,McDonald's,720,UPI
+11-07-2025,Ajio,1399,Credit Card
+11-07-2025,Uber,420,Credit Card
+11-07-2025,Big Bazaar,2750,Debit Card
+12-07-2025,Domino's,540,UPI
+12-07-2025,Airtel,899,UPI
+12-07-2025,Flipkart,2799,Credit Card
+13-07-2025,IRCTC,1580,UPI
+13-07-2025,Starbucks,360,Debit Card
+13-07-2025,Amazon,2199,Credit Card
+14-07-2025,Swiggy,520,UPI
+14-07-2025,BESCOM,2325,Net Banking
+14-07-2025,Big Bazaar,3000,Debit Card
+15-07-2025,Company Salary,46000,Bank Transfer
+15-07-2025,Tata Sky,450,UPI
+15-07-2025,Ajio,1499,Credit Card
+16-07-2025,Ola Cabs,400,UPI
+16-07-2025,Reliance Store,2100,Debit Card
+16-07-2025,Domino's,610,UPI
+17-07-2025,Hotstar,499,Credit Card
+17-07-2025,Amazon,2399,Credit Card
+17-07-2025,Starbucks,360,Debit Card
+18-07-2025,IRCTC,1620,UPI
+18-07-2025,Swiggy,520,UPI
+18-07-2025,Pantaloons,2190,Credit Card
+19-07-2025,Uber,410,Credit Card
+19-07-2025,McDonald's,640,UPI
+19-07-2025,Big Bazaar,3150,Debit Card
+20-07-2025,Airtel,899,UPI
+20-07-2025,Flipkart,2599,Credit Card
+20-07-2025,Domino's,540,UPI
+21-07-2025,Ajio,1699,Credit Card
+21-07-2025,Swiggy,510,UPI
+21-07-2025,Uber,420,Credit Card
+22-07-2025,Rajesh Sharma,16310,Bank Transfer
+22-07-2025,Netflix,649,Credit Card
+22-07-2025,Big Bazaar,2850,Debit Card
+22-07-2025,Amazon,2299,Credit Card
+23-07-2025,Swiggy,530,UPI
+23-07-2025,BESCOM,2320,Net Banking
+23-07-2025,Domino's,560,UPI
+24-07-2025,Flipkart,2799,Credit Card
+24-07-2025,Starbucks,350,Debit Card
+24-07-2025,IRCTC,1560,UPI
+25-07-2025,Ajio,1499,Credit Card
+25-07-2025,Uber,380,Credit Card
+25-07-2025,Reliance Store,1980,Debit Card
+26-07-2025,Tata Power,1760,Net Banking
+26-07-2025,Swiggy,540,UPI
+26-07-2025,McDonald's,680,UPI
+27-07-2025,BESCOM,2350,Net Banking
+27-07-2025,Amazon,2199,Credit Card
+27-07-2025,Hotstar,499,Credit Card
+28-07-2025,Big Bazaar,3000,Debit Card
+28-07-2025,Domino's,610,UPI
+28-07-2025,Flipkart,2999,Credit Card
+29-07-2025,Airtel,899,UPI
+29-07-2025,Ajio,1599,Credit Card
+29-07-2025,Uber,410,Credit Card
+30-07-2025,IRCTC,1620,UPI
+30-07-2025,Starbucks,360,Debit Card
+30-07-2025,Amazon,2399,Credit Card
+31-07-2025,Company Salary,46000,Bank Transfer

@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Professional Financial Dashboard Design System 
+All colors MUST be HSL for Material UI compatibility.
+*/
+
+@layer base {
+  :root {
+    /* Professional Financial Color Palette */
+    --background: 0 0% 99%;
+    --foreground: 215 28% 17%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 28% 17%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 28% 17%;
+
+    /* Deep Navy Primary - Trust & Professionalism */
+    --primary: 215 50% 25%;
+    --primary-foreground: 0 0% 98%;
+    --primary-light: 215 45% 35%;
+    --primary-dark: 215 55% 15%;
+
+    /* Cool Gray Secondary */
+    --secondary: 215 15% 95%;
+    --secondary-foreground: 215 25% 25%;
+
+    /* Subtle backgrounds */
+    --muted: 215 15% 97%;
+    --muted-foreground: 215 15% 45%;
+
+    /* Professional Accent - Subtle Blue */
+    --accent: 215 25% 92%;
+    --accent-foreground: 215 50% 25%;
+
+    /* Financial Status Colors */
+    --success: 142 69% 58%;
+    --success-foreground: 0 0% 98%;
+    --warning: 43 96% 56%;
+    --warning-foreground: 215 28% 17%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* Financial Data Colors */
+    --profit: 142 69% 58%;
+    --loss: 0 72% 51%;
+    --neutral: 215 15% 55%;
+
+    /* Interface Elements */
+    --border: 215 20% 90%;
+    --input: 215 20% 95%;
+    --ring: 215 50% 25%;
+
+    /* Premium Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(215 50% 25%), hsl(215 45% 35%));
+    --gradient-success: linear-gradient(135deg, hsl(142 69% 58%), hsl(142 65% 48%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(215 15% 98%));
+
+    /* Shadows for depth */
+    --shadow-card: 0 1px 3px 0 hsl(215 28% 17% / 0.1), 0 1px 2px 0 hsl(215 28% 17% / 0.06);
+    --shadow-elevated: 0 4px 6px -1px hsl(215 28% 17% / 0.1), 0 2px 4px -1px hsl(215 28% 17% / 0.06);
+    --shadow-premium: 0 10px 25px -3px hsl(215 50% 25% / 0.1), 0 4px 6px -2px hsl(215 50% 25% / 0.05);
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark mode for professional financial app */
+    --background: 215 28% 8%;
+    --foreground: 215 15% 95%;
+
+    --card: 215 28% 10%;
+    --card-foreground: 215 15% 95%;
+
+    --popover: 215 28% 10%;
+    --popover-foreground: 215 15% 95%;
+
+    --primary: 215 45% 65%;
+    --primary-foreground: 215 28% 8%;
+    --primary-light: 215 45% 75%;
+    --primary-dark: 215 45% 55%;
+
+    --secondary: 215 20% 15%;
+    --secondary-foreground: 215 15% 85%;
+
+    --muted: 215 20% 12%;
+    --muted-foreground: 215 15% 65%;
+
+    --accent: 215 25% 18%;
+    --accent-foreground: 215 45% 65%;
+
+    --success: 142 69% 58%;
+    --success-foreground: 215 28% 8%;
+    --warning: 43 96% 56%;
+    --warning-foreground: 215 28% 8%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 215 15% 95%;
+
+    --profit: 142 69% 58%;
+    --loss: 0 72% 51%;
+    --neutral: 215 15% 55%;
+
+    --border: 215 20% 20%;
+    --input: 215 20% 15%;
+    --ring: 215 45% 65%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(215 45% 65%), hsl(215 45% 55%));
+    --gradient-success: linear-gradient(135deg, hsl(142 69% 58%), hsl(142 65% 48%));
+    --gradient-card: linear-gradient(145deg, hsl(215 28% 10%), hsl(215 20% 12%));
+
+    --shadow-card: 0 1px 3px 0 hsl(0 0% 0% / 0.3), 0 1px 2px 0 hsl(0 0% 0% / 0.2);
+    --shadow-elevated: 0 4px 6px -1px hsl(0 0% 0% / 0.3), 0 2px 4px -1px hsl(0 0% 0% / 0.2);
+    --shadow-premium: 0 10px 25px -3px hsl(0 0% 0% / 0.4), 0 4px 6px -2px hsl(0 0% 0% / 0.3);
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
