@@ -34,7 +34,8 @@ engine = None
 SessionLocal = None
 if DATABASE_URL:
     try:
-        engine = create_engine(DATABASE_URL, future=True)
+        engine = create_engine(DATABASE_URL, future=True,pool_pre_ping=True,
+    pool_recycle=300)
         SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     except Exception:
         # If DB deps aren't installed yet (or URL invalid), keep the app running
