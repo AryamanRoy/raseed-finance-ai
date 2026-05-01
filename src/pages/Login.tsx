@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Container,
@@ -15,6 +15,8 @@ import {
 import { AccountBalance, Lock } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,14 +24,63 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const handler = (event: MessageEvent) => {
+      const data = event.data as { type?: string; token?: string };
+      if (data?.type === 'oauth-success' && data.token) {
+        localStorage.setItem('auth_token', data.token);
+        navigate('/dashboard');
+      }
+    };
+    window.addEventListener('message', handler);
+    return () => window.removeEventListener('message', handler);
+  }, [navigate]);
+
+  const handleGoogleLogin = () => {
+    const width = 500;
+    const height = 600;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2;
+    window.open(
+      `${API_BASE}/auth/google/login`,
+      'google-oauth',
+      `width=${width},height=${height},left=${left},top=${top}`,
+    );
+  };
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    setError('');
     if (!email || !password) {
       setError('Please fill in all fields');
       return;
     }
-    // TODO: Implement actual login logic
-    navigate('/dashboard');
+
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+    fetch(`${apiUrl}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          const data = await res.json().catch(() => null);
+          const msg = data?.detail || 'Invalid credentials or user not found.';
+          throw new Error(msg);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data?.access_token) {
+          localStorage.setItem('auth_token', data.access_token);
+          navigate('/dashboard');
+        } else {
+          throw new Error('Unexpected response from server.');
+        }
+      })
+      .catch((err: Error) => {
+        setError(err.message);
+      });
   };
 
   return (
@@ -149,6 +200,15 @@ const Login: React.FC = () => {
               }}
             >
               Sign In
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              startIcon={<Lock />}
+              onClick={handleGoogleLogin}
+              sx={{ mb: 1 }}
+            >
+              Continue with Google
             </Button>
             <Box sx={{ textAlign: 'center', mt: 2 }}>
               <Link

@@ -4,11 +4,17 @@ uvicorn
 python-multipart
 
 # --- Google Gemini ---
-google-generativeai
+google-genai
 
 # --- Data and Utility ---
 pandas
 python-dotenv
+
+# --- Auth & Database ---
+sqlalchemy
+psycopg[binary,pool]
+python-jose[cryptography]
+httpx
 
 # --- Optional (for testing/legacy UI) ---
 streamlit

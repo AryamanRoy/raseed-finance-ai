@@ -25,9 +25,15 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
 
       // Call the categorization API
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const token = localStorage.getItem('auth_token');
       const response = await fetch(`${apiUrl}/api/categorize`, {
         method: 'POST',
         body: formData,
+        headers: token
+          ? {
+              Authorization: `Bearer ${token}`,
+            }
+          : undefined,
       });
 
       if (!response.ok) {
@@ -46,6 +52,11 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       // Get the categorized CSV file
       const categorizedText = await response.text();
       const parsed = parseCSV(categorizedText);
+      if (parsed.length === 0) {
+        throw new Error(
+          'CSV was uploaded but no transactions could be parsed. Please verify headers like Date, Receiver Name, Amount, Mode of Transaction.',
+        );
+      }
       
       console.log('Parsed transactions:', parsed.length);
       if (parsed.length > 0) {

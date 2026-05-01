@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Box,
   IconButton,
@@ -9,18 +9,16 @@ import {
   Divider,
   ListItemIcon,
 } from '@mui/material';
-import {
-  Person,
-  Settings,
-  Logout,
-  AccountCircle,
-} from '@mui/icons-material';
+import { Person, Settings, Logout, AccountCircle } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import { clearAuth, getCurrentUser } from '@/lib/auth';
 
 export const UserProfile: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
+
+  const user = useMemo(() => getCurrentUser(), []);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -31,7 +29,7 @@ export const UserProfile: React.FC = () => {
   };
 
   const handleLogout = () => {
-    // TODO: Implement logout logic
+    clearAuth();
     navigate('/login');
     handleClose();
   };
@@ -96,11 +94,13 @@ export const UserProfile: React.FC = () => {
       >
         <Box sx={{ px: 2, py: 1.5 }}>
           <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-            John Doe
+            {user?.email ?? 'Signed in user'}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            john.doe@example.com
-          </Typography>
+          {user?.role && (
+            <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              {user.role}
+            </Typography>
+          )}
         </Box>
         
         <Divider />

@@ -11,9 +11,43 @@ export const parseCSV = (csvText: string): Transaction[] => {
   const lines = csvText.trim().split('\n');
   if (lines.length < 2) return [];
 
+  // Parse header row and map known aliases.
+  const headerColumns = lines[0]
+    .split(',')
+    .map((h) => h.trim().toLowerCase().replace(/[\s_]+/g, ' '));
+
+  const getHeaderIndex = (aliases: string[]) =>
+    headerColumns.findIndex((h) => aliases.includes(h));
+
+  const dateIdx = getHeaderIndex(['date', 'transaction date', 'txn date']);
+  const descIdx = getHeaderIndex(['receiver name', 'description', 'merchant', 'narration']);
+  const amountIdx = getHeaderIndex(['amount', 'transaction amount', 'debit amount']);
+  const paymentIdx = getHeaderIndex(['mode of transaction', 'payment method', 'mode']);
+  const categoryIdx = getHeaderIndex(['category']);
+
   // Skip header row
   const dataLines = lines.slice(1);
   const transactions: Transaction[] = [];
+
+  const parseDate = (value: string): Date | null => {
+    const raw = value.trim();
+    if (!raw) return null;
+
+    // Try native parser first (handles yyyy-mm-dd etc.)
+    const native = new Date(raw);
+    if (!isNaN(native.getTime())) return native;
+
+    // Handle dd-mm-yyyy / dd/mm/yyyy
+    const parts = raw.split(/[-/]/);
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10);
+      const year = parseInt(parts[2], 10);
+      const d = new Date(year, month - 1, day);
+      if (!isNaN(d.getTime())) return d;
+    }
+    return null;
+  };
 
   dataLines.forEach((line, index) => {
     // Handle CSV parsing with quotes and commas
@@ -35,32 +69,30 @@ export const parseCSV = (csvText: string): Transaction[] => {
     }
     columns.push(current.trim()); // Push last column
 
-    if (columns.length >= 5) {
-      const [dateStr, description, amountStr, paymentMethod, category] = columns;
-      
-      // Parse date (DD-MM-YYYY format)
-      const dateParts = dateStr.trim().split('-');
-      if (dateParts.length === 3) {
-        const day = parseInt(dateParts[0], 10);
-        const month = parseInt(dateParts[1], 10);
-        const year = parseInt(dateParts[2], 10);
-        const date = new Date(year, month - 1, day);
+    const dateStr =
+      dateIdx >= 0 ? columns[dateIdx] : columns[0];
+    const description =
+      descIdx >= 0 ? columns[descIdx] : columns[1] || '';
+    const amountStr =
+      amountIdx >= 0 ? columns[amountIdx] : columns[2] || '0';
+    const paymentMethod =
+      paymentIdx >= 0 ? columns[paymentIdx] : columns[3] || 'Unknown';
+    const category =
+      categoryIdx >= 0 ? columns[categoryIdx] : columns[4] || 'Other';
 
-        // Parse amount - remove any commas or spaces
-        const cleanAmountStr = amountStr.trim().replace(/[,\s]/g, '');
-        const amount = parseFloat(cleanAmountStr) || 0;
+    const date = parseDate(dateStr || '');
+    const cleanAmountStr = (amountStr || '').trim().replace(/[,\s]/g, '');
+    const amount = Math.abs(parseFloat(cleanAmountStr) || 0);
 
-        if (!isNaN(date.getTime()) && !isNaN(amount) && amount > 0) {
-          transactions.push({
-            id: `txn-${index}-${Date.now()}`,
-            date,
-            description: description.trim(),
-            amount,
-            category: category.trim(),
-            paymentMethod: paymentMethod.trim(),
-          });
-        }
-      }
+    if (date && !isNaN(amount) && amount > 0) {
+      transactions.push({
+        id: `txn-${index}-${Date.now()}`,
+        date,
+        description: description.trim(),
+        amount,
+        category: category.trim() || 'Other',
+        paymentMethod: paymentMethod.trim() || 'Unknown',
+      });
     }
   });
 

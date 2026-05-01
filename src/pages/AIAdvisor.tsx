@@ -70,9 +70,13 @@ const AIAdvisor: React.FC = () => {
 
     try {
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      const token = localStorage.getItem('auth_token');
       const res = await fetch(`${apiUrl}/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({
           message: userMessage.content,
           file_id: "latest", // ✅ backend will use latest categorized CSV
