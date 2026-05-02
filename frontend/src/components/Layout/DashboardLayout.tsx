@@ -26,6 +26,7 @@ export const DashboardLayout: React.FC = () => {
       case '/advisor': return 'AI Financial Advisor';
       case '/tracker': return 'Expense Tracker';
       case '/inventory': return 'Inventory Management';
+      case '/simulation': return 'Goals';
       default: return 'AI Financial Management';
     }
   };

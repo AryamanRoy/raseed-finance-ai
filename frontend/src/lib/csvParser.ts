@@ -14,6 +14,7 @@ export const parseCSV = (csvText: string): Transaction[] => {
 
   // Parse header row and map known aliases.
   const headerColumns = lines[0]
+    .replace(/^\uFEFF/, '')
     .split(',')
     .map((h) => h.trim().toLowerCase().replace(/[\s_]+/g, ' '));
 
@@ -24,7 +25,13 @@ export const parseCSV = (csvText: string): Transaction[] => {
   const descIdx = getHeaderIndex(['receiver name', 'description', 'merchant', 'narration']);
   const amountIdx = getHeaderIndex(['amount', 'transaction amount', 'debit amount']);
   const paymentIdx = getHeaderIndex(['mode of transaction', 'payment method', 'mode']);
-  const categoryIdx = getHeaderIndex(['category']);
+  const categoryIdx = getHeaderIndex([
+    'category',
+    'predicted category',
+    'expense category',
+    'spending category',
+  ]);
+  const fuzzyCategoryIdx = headerColumns.findIndex((h) => h.includes('categor'));
   const transactionTypeIdx = getHeaderIndex([
     'transaction type',
     'type of transaction',
@@ -71,7 +78,13 @@ export const parseCSV = (csvText: string): Transaction[] => {
       const char = line[i];
       
       if (char === '"') {
-        inQuotes = !inQuotes;
+        // Handle escaped quotes inside quoted text.
+        if (inQuotes && line[i + 1] === '"') {
+          current += '"';
+          i++;
+        } else {
+          inQuotes = !inQuotes;
+        }
       } else if (char === ',' && !inQuotes) {
         columns.push(current.trim());
         current = '';
@@ -90,7 +103,11 @@ export const parseCSV = (csvText: string): Transaction[] => {
     const paymentMethod =
       paymentIdx >= 0 ? columns[paymentIdx] : columns[3] || 'Unknown';
     const category =
-      categoryIdx >= 0 ? columns[categoryIdx] : columns[4] || 'Other';
+      categoryIdx >= 0
+        ? columns[categoryIdx]
+        : fuzzyCategoryIdx >= 0
+          ? columns[fuzzyCategoryIdx]
+          : columns[4] || 'Other';
     const transactionTypeStr =
       transactionTypeIdx >= 0 ? columns[transactionTypeIdx] : '';
 

@@ -18,6 +18,24 @@ import AIAdvisor from "./pages/AIAdvisor";
 import ExpenseTracker from "./pages/ExpenseTracker";
 import InventoryManagement from "./pages/InventoryManagement";
 import NotFound from "./pages/NotFound";
+import SimulationPanel from "./components/simulation/SimulationPanel";
+import GoalPanel from "./components/simulation/GoalPanel";
+import { Box, Typography } from "@mui/material";
+
+const SimulationPage = () => (
+  <Box>
+    <Box sx={{ mb: 4 }}>
+      <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
+        Goals
+      </Typography>
+      <Typography variant="body1" sx={{ color: "text.secondary" }}>
+        Run category simulations and build a focused savings plan.
+      </Typography>
+    </Box>
+    <SimulationPanel />
+    <GoalPanel />
+  </Box>
+);
 
 const queryClient = new QueryClient();
 
@@ -41,6 +59,7 @@ const App = () => (
                 <Route path="advisor" element={<AIAdvisor />} />
                 <Route path="tracker" element={<ExpenseTracker />} />
                 <Route path="inventory" element={<InventoryManagement />} />
+                <Route path="simulation" element={<SimulationPage />} />
               </Route>
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

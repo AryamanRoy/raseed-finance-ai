@@ -18,6 +18,7 @@ import {
   Inventory,
   Assessment,
   AccountBalance,
+  Savings,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -32,6 +33,7 @@ const menuItems = [
   { text: 'AI Financial Advisor', icon: Psychology, path: '/advisor' },
   { text: 'Expense Tracker', icon: Receipt, path: '/tracker' },
   { text: 'Inventory Management', icon: Inventory, path: '/inventory' },
+  { text: 'Goals', icon: Savings, path: '/simulation' },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ onItemClick }) => {
