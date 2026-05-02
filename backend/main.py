@@ -420,7 +420,7 @@ async def categorize(
                 categorized_df["Amount"], errors="coerce"
             ).fillna(0)
 
-            print(f"[INFO] Stored {len(categorized_df)} rows in memory")
+            print(f"[INFO] Stored {(categorized_df)} rows in memory")
 
         except Exception as e:
             raise HTTPException(
