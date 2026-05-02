@@ -18,6 +18,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import declarative_base, sessionmaker, Session
 from sqlalchemy.dialects.postgresql import UUID
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from simulation import apply_what_if, goal_based_engine, health_score
+
+categorized_df = None
 
 load_dotenv()
 
@@ -200,6 +203,13 @@ def custom_openapi():
     app.openapi_schema = openapi_schema
     return app.openapi_schema
 
+def get_df():
+    global categorized_df
+
+    if categorized_df is None:
+        raise HTTPException(status_code=400, detail="No categorized data available")
+
+    return categorized_df
 
 app.openapi = custom_openapi
 
@@ -364,7 +374,7 @@ async def google_callback(code: str | None = None, error: str | None = None, db:
 @app.post("/api/categorize")
 async def categorize(
     file: UploadFile = File(...),
-    user: User = Depends(get_current_user),
+    #user: User = Depends(get_current_user),
 ):
     file_id = str(uuid.uuid4())
     input_path = f"uploads/{file_id}_input.csv"
@@ -386,28 +396,54 @@ async def categorize(
         # Check if the default output file was created
         default_output = "Bank_transaction_categorized.csv"
         if os.path.exists(default_output):
-            # Move it to our unique output path
             shutil.move(default_output, output_path)
         elif not os.path.exists(output_path):
-            # If main.py didn't create the file, try to read it from the same directory
-            raise HTTPException(status_code=500, detail=f"Categorization failed. Error: {result.stderr}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Categorization failed. Error: {result.stderr}"
+            )
+
+        # -----------------------------
+        # STORE DATA IN MEMORY
+        # -----------------------------
+        global categorized_df
+
+        try:
+            categorized_df = pd.read_csv(output_path)
+
+            # Clean columns (important)
+            categorized_df["Receiver Name"] = categorized_df["Receiver Name"].astype(str).str.strip()
+            categorized_df["category"] = categorized_df["category"].astype(str).str.strip()
+            categorized_df["Amount"] = pd.to_numeric(
+                categorized_df["Amount"], errors="coerce"
+            ).fillna(0)
+
+            print(f"[INFO] Stored {len(categorized_df)} rows in memory")
+
+        except Exception as e:
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to load categorized data: {str(e)}"
+            )
 
         # Return categorized CSV file
         return FileResponse(
-            output_path, 
-            media_type="text/csv", 
+            output_path,
+            media_type="text/csv",
             filename="Bank_transaction_categorized.csv",
             headers={"Content-Disposition": "attachment; filename=Bank_transaction_categorized.csv"}
         )
+
     except subprocess.CalledProcessError as e:
         raise HTTPException(status_code=500, detail=f"Categorization failed: {e.stderr}")
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing file: {str(e)}")
+
     finally:
         # Clean up input file
         if os.path.exists(input_path):
             os.remove(input_path)
-        # Note: output file will be cleaned up after download or can be cleaned up periodically
 
 
 from dotenv import load_dotenv
@@ -638,3 +674,43 @@ async def chat(
             status_code=500, 
             detail=f"Unexpected error: {str(e)}. Please check server logs for details."
         )
+
+# -----------------------------
+# WHAT-IF SIMULATION
+# -----------------------------
+@app.post("/simulate")
+def simulate(data: dict):
+    df = get_df()
+
+    print("COLUMNS:", df.columns.tolist())
+    print("HEAD:\n", df.head())
+
+    result = apply_what_if(df, data.get("scenario", {}))
+    return {"result": result}
+
+
+# -----------------------------
+# GOAL ENGINE
+# -----------------------------
+@app.post("/goal")
+def goal(data: dict):
+    df = get_df()
+
+    return goal_based_engine(
+        df,
+        data["income"],
+        data["target"],
+        data["months"]
+    )
+
+
+# -----------------------------
+# HEALTH SCORE
+# -----------------------------
+@app.post("/health")
+def health(data: dict):
+    df = get_df()
+
+    return {
+        "score": health_score(df, data["income"])
+    }
