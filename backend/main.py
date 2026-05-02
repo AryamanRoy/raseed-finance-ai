@@ -33,6 +33,8 @@ JWT_ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 JWT_EXPIRES_MINUTES = 60 * 24 * 7  # 7 days
 ALLOW_NO_DB_MODE = os.getenv("ALLOW_NO_DB_MODE", "false").lower() in {"1", "true", "yes", "on"}
 
+print(DATABASE_URL)
+
 engine = None
 SessionLocal = None
 if DATABASE_URL:
