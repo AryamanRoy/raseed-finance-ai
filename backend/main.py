@@ -10,6 +10,7 @@ import uuid
 import shutil
 from datetime import datetime, timedelta
 from types import SimpleNamespace
+import google.generativeai as genai
 
 import httpx
 from jose import JWTError, jwt
@@ -23,6 +24,7 @@ from simulation import apply_what_if, goal_based_engine, health_score
 categorized_df = None
 
 load_dotenv()
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
@@ -543,140 +545,137 @@ async def chat(
     user: User = Depends(get_current_user),
 ):
     try:
-        # Validate API key and initialize Gemini client
-        client = get_gemini_client()
-        
-        # Handle "latest" file_id by finding the most recent output file
+        # -------------------------
+        # Resolve file path
+        # -------------------------
         if req.file_id == "latest":
             uploads_dir = "uploads"
+
             if not os.path.exists(uploads_dir):
-                raise HTTPException(
-                    status_code=404, 
-                    detail="No categorized files found. Please upload and categorize a CSV file first using the CSV upload feature."
-                )
-            
-            # Find all output CSV files
-            try:
-                output_files = [f for f in os.listdir(uploads_dir) if f.endswith("_output.csv")]
-            except Exception as e:
-                raise HTTPException(
-                    status_code=500,
-                    detail=f"Error reading uploads directory: {str(e)}"
-                )
-            
+                raise HTTPException(404, "No categorized files found.")
+
+            output_files = [f for f in os.listdir(uploads_dir) if f.endswith("_output.csv")]
+
             if not output_files:
-                raise HTTPException(
-                    status_code=404, 
-                    detail="No categorized files found. Please upload and categorize a CSV file first using the CSV upload feature."
-                )
-            
-            # Get the most recently modified file
+                raise HTTPException(404, "No categorized files found.")
+
             file_paths = [os.path.join(uploads_dir, f) for f in output_files]
             file_path = max(file_paths, key=os.path.getmtime)
-            print(f"Using latest file: {file_path}")  # Debug log
+
         else:
             file_path = f"uploads/{req.file_id}_output.csv"
             if not os.path.exists(file_path):
-                raise HTTPException(
-                    status_code=404, 
-                    detail=f"Categorized file not found for file_id: {req.file_id}. Please upload and categorize a CSV file first."
-                )
+                raise HTTPException(404, "Categorized file not found.")
 
-        # Load and summarize
+        # -------------------------
+        # Load + process CSV
+        # -------------------------
         try:
             with open(file_path, "rb") as f:
                 file_bytes = f.read()
+
             df = load_expense_csv(file_bytes)
+
             if df.empty:
-                raise HTTPException(status_code=400, detail="The CSV file is empty or could not be parsed.")
+                raise HTTPException(400, "CSV is empty.")
+
             dfn, cols = normalize_expenses(df)
             profile = summarize(dfn, cols)
-        except Exception as e:
-            raise HTTPException(status_code=400, detail=f"Error processing CSV file: {str(e)}")
 
-        # Build context + query
+        except Exception as e:
+            raise HTTPException(400, f"CSV processing error: {str(e)}")
+
+        # -------------------------
+        # Build context + memory
+        # -------------------------
         ctx_block = build_context_block(profile, req.income)
-        memory = update_memory_summary(req.memory or "", req.history or [], max_chars=900)
 
-        parts = craft_parts(
-            history=req.history or [],
-            ctx_block=ctx_block,
-            query=req.message,
-            mem_summary=memory
-        )
+        history = req.history or []
+        memory = update_memory_summary(req.memory or "", history, max_chars=900)
 
-        # Generate response from Gemini using cheaper flash model
-        try:
-            model_name = "gemini-2.5-flash"
-            if HAS_NEW_GENAI:
-                resp = client.models.generate_content(
-                    model=model_name,
-                    contents=parts,
-                    config={"system_instruction": SYSTEM},
-                )
-            else:
-                model = legacy_genai.GenerativeModel(model_name=model_name, system_instruction=SYSTEM)
-                resp = model.generate_content(parts)
-            
-            # Extract text from response
-            answer = ""
-            if hasattr(resp, 'text') and resp.text:
-                answer = resp.text
-            elif hasattr(resp, 'candidates') and resp.candidates:
-                # Try to get text from candidates
-                candidate = resp.candidates[0]
-                if hasattr(candidate, 'content') and hasattr(candidate.content, 'parts'):
-                    answer = "".join(part.text for part in candidate.content.parts if hasattr(part, 'text'))
-            
-            if not answer or not answer.strip():
-                # Check if response was blocked
-                if hasattr(resp, 'prompt_feedback'):
-                    block_reason = getattr(resp.prompt_feedback, 'block_reason', None)
-                    if block_reason:
-                        raise HTTPException(
-                            status_code=400,
-                            detail=f"Response was blocked: {block_reason}. Please try rephrasing your question."
-                        )
-                raise HTTPException(
-                    status_code=500, 
-                    detail="Gemini API returned an empty response. Please check your API key and try again."
-                )
-            
-            answer = enforce_note(answer.strip())
-        except HTTPException:
-            raise
-        except Exception as e:
-            error_msg = str(e)
-            if "API key" in error_msg or "authentication" in error_msg.lower() or "403" in error_msg:
-                raise HTTPException(
-                    status_code=401, 
-                    detail=f"Gemini API authentication failed: {error_msg}. Please check your API key."
-                )
-            if "429" in error_msg or "quota" in error_msg.lower():
-                raise HTTPException(
-                    status_code=429,
-                    detail="Gemini API quota exceeded. Please try again later."
-                )
-            raise HTTPException(
-                status_code=500, 
-                detail=f"Error calling Gemini API: {error_msg}"
+        # -------------------------
+        # Build prompt (FIXED)
+        # -------------------------
+        history_text = ""
+        if history:
+            recent = history[-3:]
+            history_text = "\n".join(
+                [
+                    f"User: {h['content']}" if h["role"] == "user"
+                    else f"Assistant: {h['content']}"
+                    for h in recent
+                ]
             )
 
-        return {"response": answer, "memory": memory}
+        prompt = f"""
+SYSTEM:
+{SYSTEM}
+
+MEMORY:
+{memory}
+
+CONTEXT:
+{ctx_block}
+
+RECENT HISTORY:
+{history_text}
+
+USER QUERY:
+{req.message}
+
+INSTRUCTIONS:
+- Give short, structured answers
+- Be practical
+- Do not hallucinate numbers
+- Suggest actionable steps
+"""
+
+        # -------------------------
+        # Gemini call (CORRECT)
+        # -------------------------
+        try:
+            model = genai.GenerativeModel(
+                model_name="gemini-2.5-flash",
+                generation_config={"temperature": 0.3},
+            )
+
+            chat = model.start_chat()
+            resp = chat.send_message(prompt)
+
+            answer = (resp.text or "").strip()
+            answer = enforce_note(answer)
+
+            if not answer:
+                raise HTTPException(500, "Empty response from Gemini")
+
+        except Exception as e:
+            error_msg = str(e)
+
+            if "API key" in error_msg or "403" in error_msg:
+                raise HTTPException(401, "Gemini API key issue")
+
+            if "429" in error_msg:
+                raise HTTPException(429, "Gemini quota exceeded")
+
+            raise HTTPException(500, f"Gemini error: {error_msg}")
+
+        return {
+            "response": answer,
+            "memory": memory
+        }
 
     except HTTPException:
-        # Re-raise HTTP exceptions (like 404) as-is
         raise
-    except Exception as e:
-        # Log full error for debugging, but return user-friendly message
-        import traceback
-        error_trace = traceback.format_exc()
-        print(f"Unexpected error in chat endpoint: {error_trace}")  # Log to console
-        raise HTTPException(
-            status_code=500, 
-            detail=f"Unexpected error: {str(e)}. Please check server logs for details."
-        )
 
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())
+
+        raise HTTPException(
+            status_code=500,
+            detail=f"Unexpected error: {str(e)}"
+        )
+        
 # -----------------------------
 # WHAT-IF SIMULATION
 # -----------------------------

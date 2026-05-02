@@ -106,3 +106,39 @@ def enforce_note(text: str) -> str:
             f"{NOTE}"
         )
     return text
+
+def build_prompt(ctx_block: str, query: str, mem_summary: str = "", history=None):
+    history_text = ""
+
+    if history:
+        recent = history[-3:]
+        history_text = "\n".join(
+            [f"User: {h['q']}\nAssistant: {h['a']}" for h in recent]
+        )
+
+    return f"""
+SYSTEM:
+You are a friendly personal finance copilot for India.
+
+MEMORY:
+{mem_summary}
+
+CONTEXT:
+{ctx_block}
+
+RECENT HISTORY:
+{history_text}
+
+USER QUESTION:
+{query}
+
+INSTRUCTIONS:
+- Be concise
+- Use bullet points
+- Give actionable financial advice
+- Do NOT recommend specific stocks/funds
+- Use categories only
+
+Always end with:
+Educational only. Not financial advice. Please research before investing.
+"""

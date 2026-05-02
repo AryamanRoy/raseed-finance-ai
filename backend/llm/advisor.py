@@ -1,15 +1,12 @@
 import os
-import json
-import pandas as pd
 from dotenv import load_dotenv, find_dotenv
 
 # Local modules
-from backend.llm.app.data_model import load_expense_csv, normalize_expenses, summarize
+from backend.llm.app.data_model import summarize
 from backend.llm.app.chat_brain import (
     build_context_block,
-    craft_parts,
     enforce_note,
-    update_memory_summary,  # memory-lite
+    update_memory_summary,
 )
 
 # Gemini SDK
@@ -17,6 +14,8 @@ import google.generativeai as genai
 
 # ------------------------- Init -------------------------
 load_dotenv(find_dotenv(), override=False)
+
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 SYSTEM = (
     "You are a friendly personal finance copilot for India-focused users.\n"
@@ -28,18 +27,96 @@ SYSTEM = (
     "Educational only. Not financial advice. Please research before investing.\n"
 )
 
-parts = craft_parts(
-        history=st.session_state["history"][:-1],  # prior turns only
-        ctx_block=ctx_block,
-        query=q,
-        mem_summary=st.session_state["mem_summary"]
-    )
+MODEL_NAME = "gemini-2.5-flash"
 
-try:
-    model_name = "gemini-2.5-flash"
-    model = genai.GenerativeModel(model_name=model_name, system_instruction=SYSTEM)
-    resp = model.generate_content(parts)
-    answer = (resp.text or "").strip()
-    answer = enforce_note(answer)
-except Exception as e:
-    answer = f"Gemini error: {e}"
+# ------------------------- Chat Function -------------------------
+def run_advisor_query(q, df, session_state):
+    """
+    Main advisor function
+    """
+
+    # -------------------------
+    # Build expense summary
+    # -------------------------
+    try:
+        expense_profile = summarize(df)
+    except Exception:
+        expense_profile = {}
+
+    monthly_income = session_state.get("income", None)
+
+    # -------------------------
+    # Build context (FIXED)
+    # -------------------------
+    ctx_block = build_context_block(expense_profile, monthly_income)
+
+    mem_summary = session_state.get("mem_summary", "")
+    history = session_state.get("history", [])
+
+    # -------------------------
+    # Build prompt
+    # -------------------------
+    history_text = ""
+    if history:
+        recent = history[-3:]
+        history_text = "\n".join(
+            [f"User: {h['q']}\nAssistant: {h['a']}" for h in recent]
+        )
+
+    prompt = f"""
+SYSTEM:
+{SYSTEM}
+
+MEMORY:
+{mem_summary}
+
+CONTEXT:
+{ctx_block}
+
+RECENT HISTORY:
+{history_text}
+
+USER QUERY:
+{q}
+
+INSTRUCTIONS:
+- Give a short, structured answer
+- Be practical
+- Do not hallucinate numbers
+- Suggest actionable steps
+"""
+
+    # -------------------------
+    # Gemini Chat
+    # -------------------------
+    try:
+        model = genai.GenerativeModel(model_name=MODEL_NAME)
+        chat = model.start_chat(history=[])
+
+        response = chat.send_message(prompt)
+
+        answer = (response.text or "").strip()
+        answer = enforce_note(answer)
+
+    except Exception as e:
+        return f"Gemini error: {e}"
+
+    # -------------------------
+    # Update history (FIXED STRUCTURE)
+    # -------------------------
+    session_state.setdefault("history", [])
+    session_state["history"].append({"role": "user", "content": q})
+    session_state["history"].append({"role": "assistant", "content": answer})
+
+    # -------------------------
+    # Update memory (FIXED CALL)
+    # -------------------------
+    try:
+        session_state["mem_summary"] = update_memory_summary(
+            mem_summary,
+            session_state["history"]
+        )
+    except Exception:
+        pass
+
+    return answer
