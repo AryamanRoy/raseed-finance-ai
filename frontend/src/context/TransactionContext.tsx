@@ -52,7 +52,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       const parsed = parseCSV(categorizedText);
       if (parsed.length === 0) {
         throw new Error(
-          'CSV was uploaded but no transactions could be parsed. Please verify headers like Date, Receiver Name, Amount, Mode of Transaction.',
+          'CSV was uploaded but no transactions could be parsed. Please verify headers like Date, Receiver Name, Amount, Mode of Transaction, and Transaction Type (credit/debit).',
         );
       }
       

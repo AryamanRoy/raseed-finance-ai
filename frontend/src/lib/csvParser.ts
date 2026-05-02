@@ -5,6 +5,7 @@ export interface Transaction {
   amount: number;
   category: string;
   paymentMethod: string;
+  transactionType: 'credit' | 'debit';
 }
 
 export const parseCSV = (csvText: string): Transaction[] => {
@@ -24,6 +25,10 @@ export const parseCSV = (csvText: string): Transaction[] => {
   const amountIdx = getHeaderIndex(['amount', 'transaction amount', 'debit amount']);
   const paymentIdx = getHeaderIndex(['mode of transaction', 'payment method', 'mode']);
   const categoryIdx = getHeaderIndex(['category']);
+  const transactionTypeIdx = getHeaderIndex([
+    'transaction type',
+    'type of transaction',
+  ]);
 
   // Skip header row
   const dataLines = lines.slice(1);
@@ -46,6 +51,13 @@ export const parseCSV = (csvText: string): Transaction[] => {
       const d = new Date(year, month - 1, day);
       if (!isNaN(d.getTime())) return d;
     }
+    return null;
+  };
+
+  const parseTransactionType = (raw: string): 'credit' | 'debit' | null => {
+    const normalized = (raw || '').trim().toLowerCase();
+    if (normalized === 'credit') return 'credit';
+    if (normalized === 'debit') return 'debit';
     return null;
   };
 
@@ -79,12 +91,15 @@ export const parseCSV = (csvText: string): Transaction[] => {
       paymentIdx >= 0 ? columns[paymentIdx] : columns[3] || 'Unknown';
     const category =
       categoryIdx >= 0 ? columns[categoryIdx] : columns[4] || 'Other';
+    const transactionTypeStr =
+      transactionTypeIdx >= 0 ? columns[transactionTypeIdx] : '';
 
     const date = parseDate(dateStr || '');
     const cleanAmountStr = (amountStr || '').trim().replace(/[,\s]/g, '');
     const amount = Math.abs(parseFloat(cleanAmountStr) || 0);
+    const transactionType = parseTransactionType(transactionTypeStr);
 
-    if (date && !isNaN(amount) && amount > 0) {
+    if (date && !isNaN(amount) && amount > 0 && transactionType) {
       transactions.push({
         id: `txn-${index}-${Date.now()}`,
         date,
@@ -92,6 +107,7 @@ export const parseCSV = (csvText: string): Transaction[] => {
         amount,
         category: category.trim() || 'Other',
         paymentMethod: paymentMethod.trim() || 'Unknown',
+        transactionType,
       });
     }
   });
@@ -125,24 +141,21 @@ export const getTransactionsByCategory = (transactions: Transaction[]) => {
   }));
 };
 
-// Determine if a transaction is income based on description
-const isIncome = (description: string): boolean => {
-  const incomeKeywords = ['salary', 'income', 'refund'];
-  // Check for "Company Salary" or similar patterns
-  const lowerDesc = description.toLowerCase();
-  return incomeKeywords.some(keyword => lowerDesc.includes(keyword)) ||
-         (lowerDesc.includes('company') && lowerDesc.includes('salary'));
-};
+export const getDebitTransactions = (transactions: Transaction[]): Transaction[] =>
+  transactions.filter((txn) => txn.transactionType === 'debit');
+
+export const getCreditTransactions = (transactions: Transaction[]): Transaction[] =>
+  transactions.filter((txn) => txn.transactionType === 'credit');
 
 export const getTotalIncome = (transactions: Transaction[]): number => {
   return transactions
-    .filter(txn => isIncome(txn.description))
+    .filter((txn) => txn.transactionType === 'debit')
     .reduce((sum, txn) => sum + txn.amount, 0);
 };
 
 export const getTotalExpenses = (transactions: Transaction[]): number => {
   return transactions
-    .filter(txn => !isIncome(txn.description))
+    .filter((txn) => txn.transactionType === 'credit')
     .reduce((sum, txn) => sum + txn.amount, 0);
 };
 

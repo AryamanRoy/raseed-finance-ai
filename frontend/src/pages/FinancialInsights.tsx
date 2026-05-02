@@ -39,13 +39,6 @@ const FinancialInsights: React.FC = () => {
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
 
-  const isIncome = (desc: string) => {
-    const incomeKeywords = ['salary', 'income', 'refund'];
-    const lowerDesc = desc.toLowerCase();
-    return incomeKeywords.some(keyword => lowerDesc.includes(keyword)) ||
-           (lowerDesc.includes('company') && lowerDesc.includes('salary'));
-  };
-
   // Get the most recent month from the data
   const getMostRecentMonth = useMemo(() => {
     if (!hasData || transactions.length === 0) return { month: currentMonth, year: currentYear };
@@ -64,13 +57,13 @@ const FinancialInsights: React.FC = () => {
 
   const income = useMemo(() => {
     return monthTransactions
-      .filter(t => isIncome(t.description))
+      .filter((t) => t.transactionType === 'debit')
       .reduce((sum, t) => sum + t.amount, 0);
   }, [monthTransactions]);
 
   const expenses = useMemo(() => {
     return monthTransactions
-      .filter(t => !isIncome(t.description))
+      .filter((t) => t.transactionType === 'credit')
       .reduce((sum, t) => sum + t.amount, 0);
   }, [monthTransactions]);
 
@@ -78,7 +71,7 @@ const FinancialInsights: React.FC = () => {
   const categoryTotals = useMemo(() => {
     const categoryMap = new Map<string, number>();
     monthTransactions
-      .filter(t => !isIncome(t.description))
+      .filter((t) => t.transactionType === 'credit')
       .forEach(txn => {
         const current = categoryMap.get(txn.category) || 0;
         categoryMap.set(txn.category, current + txn.amount);

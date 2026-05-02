@@ -23,9 +23,6 @@ import { useTransactions } from '@/context/TransactionContext';
 import { CSVUpload } from '@/components/CSVUpload';
 import { 
   getTransactionsForMonth, 
-  getTransactionsByCategory, 
-  getTotalIncome, 
-  getTotalExpenses,
   getCategoryColor 
 } from '@/lib/csvParser';
 import { useNavigate } from 'react-router-dom';
@@ -55,23 +52,15 @@ const Dashboard: React.FC = () => {
     return getTransactionsForMonth(transactions, getMostRecentMonth.month, getMostRecentMonth.year);
   }, [transactions, getMostRecentMonth.month, getMostRecentMonth.year, hasData]);
 
-  // Calculate metrics
-  const isIncome = (desc: string) => {
-    const incomeKeywords = ['salary', 'income', 'refund'];
-    const lowerDesc = desc.toLowerCase();
-    return incomeKeywords.some(keyword => lowerDesc.includes(keyword)) ||
-           (lowerDesc.includes('company') && lowerDesc.includes('salary'));
-  };
-
   const income = useMemo(() => {
     return monthTransactions
-      .filter(t => isIncome(t.description))
+      .filter((t) => t.transactionType === 'debit')
       .reduce((sum, t) => sum + t.amount, 0);
   }, [monthTransactions]);
 
   const expenses = useMemo(() => {
     return monthTransactions
-      .filter(t => !isIncome(t.description))
+      .filter((t) => t.transactionType === 'credit')
       .reduce((sum, t) => sum + t.amount, 0);
   }, [monthTransactions]);
 
@@ -79,7 +68,7 @@ const Dashboard: React.FC = () => {
 
   // Category breakdown
   const expenseTransactions = useMemo(() => {
-    return monthTransactions.filter(t => !isIncome(t.description));
+    return monthTransactions.filter((t) => t.transactionType === 'credit');
   }, [monthTransactions]);
 
   const categoryData = useMemo(() => {

@@ -45,13 +45,6 @@ const ExpenseVisualization: React.FC = () => {
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
 
-  const isIncome = (desc: string) => {
-    const incomeKeywords = ['salary', 'income', 'refund'];
-    const lowerDesc = desc.toLowerCase();
-    return incomeKeywords.some(keyword => lowerDesc.includes(keyword)) ||
-           (lowerDesc.includes('company') && lowerDesc.includes('salary'));
-  };
-
   // Get the most recent month from the data
   const getMostRecentMonth = useMemo(() => {
     if (!hasData || transactions.length === 0) return { month: currentMonth, year: currentYear };
@@ -76,7 +69,7 @@ const ExpenseVisualization: React.FC = () => {
     }
     
     const monthTransactions = getTransactionsForMonth(transactions, targetMonth, targetYear);
-    return monthTransactions.filter(t => !isIncome(t.description));
+    return monthTransactions.filter((t) => t.transactionType === 'credit');
   }, [transactions, getMostRecentMonth, timeFilter, hasData]);
 
   // Category breakdown
@@ -142,7 +135,7 @@ const ExpenseVisualization: React.FC = () => {
       
       const monthTransactions = getTransactionsForMonth(transactions, month, year);
       const expenses = monthTransactions
-        .filter(t => !isIncome(t.description))
+        .filter((t) => t.transactionType === 'credit')
         .reduce((sum, t) => sum + t.amount, 0);
       
       months.push({

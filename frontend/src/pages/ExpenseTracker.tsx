@@ -76,18 +76,11 @@ const ExpenseTracker: React.FC = () => {
     return { month: latestDate.getMonth(), year: latestDate.getFullYear() };
   }, [transactions, hasData, currentMonth, currentYear]);
 
-  const isIncome = (desc: string) => {
-    const incomeKeywords = ['salary', 'income', 'refund'];
-    const lowerDesc = desc.toLowerCase();
-    return incomeKeywords.some(keyword => lowerDesc.includes(keyword)) ||
-           (lowerDesc.includes('company') && lowerDesc.includes('salary'));
-  };
-
   const csvExpenses = useMemo(() => {
     if (!hasData) return [];
     const monthTransactions = getTransactionsForMonth(transactions, getMostRecentMonth.month, getMostRecentMonth.year);
     return monthTransactions
-      .filter(t => !isIncome(t.description))
+      .filter((t) => t.transactionType === 'credit')
       .map(t => ({
         id: t.id,
         date: t.date,
