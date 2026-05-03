@@ -1,6 +1,14 @@
 import pandas as pd
 
 # -----------------------------
+# CONFIG
+# -----------------------------
+CATEGORY_MAP = {
+    "Transport": "Travel",
+    "Health": "Medical"
+}
+
+# -----------------------------
 # PREPROCESSING (shared)
 # -----------------------------
 def preprocess(df):
@@ -19,22 +27,22 @@ def preprocess(df):
     # Clean category
     df["category"] = df["category"].astype(str).str.strip()
 
-    # 🔥 FIXED DATE PARSING (THIS IS THE KEY)
+    # -----------------------------
+    # FLEXIBLE DATE PARSING (FIXED)
+    # -----------------------------
     if "Date" in df.columns:
         df["Date"] = pd.to_datetime(
             df["Date"],
-            format="%d-%m-%Y",   # 👈 CRITICAL FIX
-            errors="coerce"
+            errors="coerce",
+            dayfirst=True
         )
 
         df = df.dropna(subset=["Date"])
 
-        df["month"] = df["Date"].dt.to_period("M")
-
-        # 🧠 safety check
         if df.empty:
-            raise ValueError("All dates failed to parse. Check format.")
+            raise ValueError("All dates failed to parse. Check CSV format.")
 
+        df["month"] = df["Date"].dt.to_period("M")
     else:
         df["month"] = "all_time"
 
@@ -55,18 +63,30 @@ def get_monthly_summary(df):
         .reset_index()
     )
 
-    try:
-        pivot = monthly.pivot(
-            index="month",
-            columns="category",
-            values="Amount"
-        ).fillna(0)
-    except Exception as e:
-        print("PIVOT ERROR:", e)
-        print(monthly.head())
-        raise e
+    pivot = monthly.pivot(
+        index="month",
+        columns="category",
+        values="Amount"
+    ).fillna(0)
 
     return pivot
+
+
+# -----------------------------
+# NORMALIZE SCENARIO
+# -----------------------------
+def normalize_scenario(scenario):
+    normalized = {"category_changes": {}, "fixed_changes": {}}
+
+    for cat, val in scenario.get("category_changes", {}).items():
+        mapped = CATEGORY_MAP.get(cat, cat)
+        normalized["category_changes"][mapped] = val
+
+    for cat, val in scenario.get("fixed_changes", {}).items():
+        mapped = CATEGORY_MAP.get(cat, cat)
+        normalized["fixed_changes"][mapped] = val
+
+    return normalized
 
 
 # -----------------------------
@@ -75,20 +95,29 @@ def get_monthly_summary(df):
 def apply_what_if(df, scenario):
     df = preprocess(df)
 
+    scenario = normalize_scenario(scenario)
+
     base_total = get_summary(df).astype(float)
     monthly = get_monthly_summary(df).astype(float)
 
     modified = base_total.copy()
 
+    print("DEBUG - Incoming scenario:", scenario)
+    print("DEBUG - Available categories:", list(base_total.index))
+
     # Apply percentage changes
     for cat, change in scenario.get("category_changes", {}).items():
         if cat in modified:
             modified.loc[cat] = modified.loc[cat] * (1 + change)
+        else:
+            print(f"WARNING: Category '{cat}' not found in data")
 
     # Apply fixed changes
     for cat, value in scenario.get("fixed_changes", {}).items():
         if cat in modified:
             modified.loc[cat] = modified.loc[cat] + float(value)
+        else:
+            print(f"WARNING: Category '{cat}' not found in data")
 
     return {
         "before": base_total.round(2).to_dict(),
@@ -101,12 +130,11 @@ def apply_what_if(df, scenario):
 
 
 # -----------------------------
-# GOAL-BASED ENGINE (monthly-aware)
+# GOAL-BASED ENGINE
 # -----------------------------
 def goal_based_engine(df, income, target, months):
     df = preprocess(df)
 
-    # Use average monthly spend instead of total
     monthly = get_monthly_summary(df)
     avg_spend = monthly.mean().sum()
 
@@ -142,7 +170,7 @@ def goal_based_engine(df, income, target, months):
 
 
 # -----------------------------
-# FINANCIAL HEALTH SCORE (improved)
+# FINANCIAL HEALTH SCORE
 # -----------------------------
 def health_score(df, income):
     df = preprocess(df)
