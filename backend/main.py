@@ -675,19 +675,32 @@ INSTRUCTIONS:
             status_code=500,
             detail=f"Unexpected error: {str(e)}"
         )
-        
-# -----------------------------
-# WHAT-IF SIMULATION
-# -----------------------------
+
+def get_latest_output():
+    uploads_dir = "uploads"
+
+    files = [f for f in os.listdir(uploads_dir) if f.endswith("_output.csv")]
+
+    if not files:
+        raise Exception("No categorized file found")
+
+    latest = max(files, key=lambda f: os.path.getmtime(os.path.join(uploads_dir, f)))
+
+    return os.path.join(uploads_dir, latest)
+
+
 @app.post("/simulate")
 def simulate(data: dict):
-    df = get_df()
+    file_path = get_latest_output()
 
-    print("COLUMNS:", df.columns.tolist())
-    print("HEAD:\n", df.head())
+    df = pd.read_csv(file_path)
+
+    print("USING FILE:", file_path)
+    print("CATEGORIES:", df["category"].unique())
 
     result = apply_what_if(df, data.get("scenario", {}))
-    return {"result": result}
+
+    return result
 
 
 # -----------------------------
