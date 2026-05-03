@@ -579,8 +579,35 @@ async def chat(
             if df.empty:
                 raise HTTPException(400, "CSV is empty.")
 
+            # -------------------------
+            # 🔥 CRITICAL FIX: REMOVE CREDIT (INCOME)
+            # -------------------------
+            df.columns = df.columns.str.strip()
+
+            if "Type of Transaction" in df.columns:
+                df["Type of Transaction"] = (
+                    df["Type of Transaction"]
+                    .astype(str)
+                    .str.lower()
+                    .str.strip()
+                )
+
+                print("Unique transaction types:", df["Type of Transaction"].unique())
+
+                before_rows = len(df)
+
+                df = df[df["Type of Transaction"] == "debit"]
+
+                print(f"Removed {before_rows - len(df)} credit rows")
+                print(f"Remaining rows: {len(df)}")
+
+            # -------------------------
+            # Continue processing
+            # -------------------------
             dfn, cols = normalize_expenses(df)
             profile = summarize(dfn, cols)
+
+            print("CATEGORY DISTRIBUTION:\n", dfn["category"].value_counts())
 
         except Exception as e:
             raise HTTPException(400, f"CSV processing error: {str(e)}")
@@ -594,7 +621,7 @@ async def chat(
         memory = update_memory_summary(req.memory or "", history, max_chars=900)
 
         # -------------------------
-        # Build prompt (FIXED)
+        # Build prompt
         # -------------------------
         history_text = ""
         if history:
@@ -631,7 +658,7 @@ INSTRUCTIONS:
 """
 
         # -------------------------
-        # Gemini call (CORRECT)
+        # Gemini call
         # -------------------------
         try:
             model = genai.GenerativeModel(
@@ -710,12 +737,22 @@ def simulate(data: dict):
 def goal(data: dict):
     df = get_df()
 
-    return goal_based_engine(
+    result = goal_based_engine(
         df,
         data["income"],
         data["target"],
         data["months"]
     )
+
+    print("Goal Result:", result)
+
+    return {
+        "requiredMonthlySavings": result.get("required_monthly_savings"),
+        "currentMonthlySpend": result.get("current_monthly_spend"),
+        "suggestedCuts": result.get("suggested_cuts"),
+        "remainingGap": result.get("remaining_gap"),
+        "message": result.get("message", "")
+    }
 
 
 # -----------------------------

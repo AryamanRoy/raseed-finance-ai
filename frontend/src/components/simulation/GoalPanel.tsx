@@ -21,22 +21,37 @@ const GoalPanel: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<GoalResponse | null>(null);
 
+  // -----------------------------
+  // REQUIRED SAVINGS
+  // -----------------------------
   const requiredMonthlySavings = useMemo(() => {
-    if (!result) {
-      return null;
-    }
-    const value = result.required_monthly_savings ?? result.requiredMonthlySavings;
+    if (!result) return null;
+
+    const value =
+      result.required_monthly_savings ?? result.requiredMonthlySavings;
+
     return typeof value === "number" ? value : null;
   }, [result]);
 
+  // -----------------------------
+  // FIXED: HANDLE OBJECT → ARRAY
+  // -----------------------------
   const suggestedCuts = useMemo(() => {
-    if (!result) {
-      return [];
-    }
+    if (!result) return [];
+
     const cuts = result.suggested_cuts ?? result.suggestedCuts;
-    return Array.isArray(cuts) ? cuts : [];
+
+    if (!cuts || typeof cuts !== "object") return [];
+
+    return Object.entries(cuts).map(([category, amount]) => ({
+      category,
+      amount,
+    }));
   }, [result]);
 
+  // -----------------------------
+  // API CALL
+  // -----------------------------
   const handleCalculatePlan = async () => {
     setLoading(true);
     setError(null);
@@ -57,6 +72,9 @@ const GoalPanel: React.FC = () => {
         target: targetValue,
         months: monthsValue,
       });
+
+      console.log("GOAL RESPONSE:", response); // 🔥 debug (optional)
+
       setResult(response);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Goal calculation failed");
@@ -75,6 +93,7 @@ const GoalPanel: React.FC = () => {
           Enter income, target savings, and timeline to calculate a plan.
         </Typography>
 
+        {/* INPUTS */}
         <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 2 }}>
           <TextField
             label="Income"
@@ -102,35 +121,51 @@ const GoalPanel: React.FC = () => {
           />
         </Box>
 
-        <Button variant="contained" onClick={handleCalculatePlan} disabled={loading}>
+        {/* BUTTON */}
+        <Button
+          variant="contained"
+          onClick={handleCalculatePlan}
+          disabled={loading}
+        >
           {loading ? "Calculating..." : "Calculate Plan"}
         </Button>
 
+        {/* ERROR */}
         {error && (
           <Alert severity="error" sx={{ mt: 2 }}>
             {error}
           </Alert>
         )}
 
+        {/* RESULT */}
         {result && (
           <Box sx={{ mt: 3 }}>
+            {/* SAVINGS */}
             <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
               Required Monthly Savings
             </Typography>
-            <Typography variant="h5" sx={{ fontWeight: 700, color: "primary.main", mb: 2 }}>
+            <Typography
+              variant="h5"
+              sx={{ fontWeight: 700, color: "primary.main", mb: 2 }}
+            >
               {requiredMonthlySavings !== null
                 ? `₹${requiredMonthlySavings.toLocaleString("en-IN")}`
                 : "Not available"}
             </Typography>
 
+            {/* CUTS */}
             <Typography variant="subtitle1" sx={{ fontWeight: 600, mb: 1 }}>
               Suggested Cuts
             </Typography>
+
             {suggestedCuts.length > 0 ? (
               <List dense sx={{ pt: 0 }}>
-                {suggestedCuts.map((item, index) => (
-                  <ListItem key={`${item}-${index}`} sx={{ px: 0 }}>
-                    <ListItemText primary={item} />
+                {suggestedCuts.map(({ category, amount }, index) => (
+                  <ListItem key={`${category}-${index}`} sx={{ px: 0 }}>
+                    <ListItemText
+                      primary={category}
+                      secondary={`₹${Number(amount).toLocaleString("en-IN")}`}
+                    />
                   </ListItem>
                 ))}
               </List>

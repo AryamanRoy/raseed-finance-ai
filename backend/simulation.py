@@ -9,13 +9,42 @@ CATEGORY_MAP = {
 }
 
 # -----------------------------
-# PREPROCESSING (shared)
+# FILTER ONLY DEBIT TRANSACTIONS
+# -----------------------------
+def filter_debits(df):
+    col = "Type of Transaction"
+
+    if col not in df.columns:
+        print("❌ 'Type of Transaction' column not found")
+        return df
+
+    df[col] = df[col].astype(str).str.strip().str.lower()
+
+    print("Unique values:", df[col].unique())
+
+    before = len(df)
+
+    # KEEP ONLY DEBIT
+    df = df[df[col] == "debit"]
+
+    after = len(df)
+
+    print(f"Removed {before - after} credit rows")
+    print(f"Remaining rows: {after}")
+
+    return df
+
+# -----------------------------
+# PREPROCESSING
 # -----------------------------
 def preprocess(df):
     df = df.copy()
 
     # Clean columns
     df.columns = df.columns.str.strip()
+
+    # 🔥 FILTER INCOME HERE
+    df = filter_debits(df)
 
     # Required columns check
     if "Amount" not in df.columns or "category" not in df.columns:
@@ -27,8 +56,10 @@ def preprocess(df):
     # Clean category
     df["category"] = df["category"].astype(str).str.strip()
 
+    print("CATEGORY DISTRIBUTION:\n", df["category"].value_counts())
+
     # -----------------------------
-    # FLEXIBLE DATE PARSING (FIXED)
+    # FLEXIBLE DATE PARSING
     # -----------------------------
     if "Date" in df.columns:
         df["Date"] = pd.to_datetime(
@@ -108,16 +139,16 @@ def apply_what_if(df, scenario):
     # Apply percentage changes
     for cat, change in scenario.get("category_changes", {}).items():
         if cat in modified:
-            modified.loc[cat] = modified.loc[cat] * (1 + change)
+            modified.loc[cat] *= (1 + change)
         else:
-            print(f"WARNING: Category '{cat}' not found in data")
+            print(f"WARNING: Category '{cat}' not found")
 
     # Apply fixed changes
     for cat, value in scenario.get("fixed_changes", {}).items():
         if cat in modified:
-            modified.loc[cat] = modified.loc[cat] + float(value)
+            modified.loc[cat] += float(value)
         else:
-            print(f"WARNING: Category '{cat}' not found in data")
+            print(f"WARNING: Category '{cat}' not found")
 
     return {
         "before": base_total.round(2).to_dict(),
@@ -130,47 +161,89 @@ def apply_what_if(df, scenario):
 
 
 # -----------------------------
-# GOAL-BASED ENGINE
+# GOAL ENGINE
 # -----------------------------
 def goal_based_engine(df, income, target, months):
     df = preprocess(df)
 
     monthly = get_monthly_summary(df)
+
+    if monthly.empty:
+        raise ValueError("No transaction data available")
+
     avg_spend = monthly.mean().sum()
 
     current_savings = income - avg_spend
     required = target / months
     gap = required - current_savings
 
+    # -----------------------------
+    # CASE 1: Goal already achievable
+    # -----------------------------
     if gap <= 0:
-        return {"message": "Goal already achievable"}
+        return {
+            "required_monthly_savings": round(required, 2),
+            "current_monthly_spend": round(avg_spend, 2),
+            "suggested_cuts": {},
+            "remaining_gap": 0,
+            "message": "Goal already achievable"
+        }
 
+    # -----------------------------
+    # CATEGORY ANALYSIS
+    # -----------------------------
     category_spend = monthly.mean().sort_values(ascending=False)
 
     cuts = {}
     remaining = gap
 
+    # -----------------------------
+    # MAIN CUT LOGIC (adaptive)
+    # -----------------------------
     for cat, amount in category_spend.items():
-        if cat in ["Bills", "Utilities"]:
+
+        # Skip only truly fixed categories
+        if cat.lower() == "bills":
             continue
 
-        cut = min(amount * 0.3, remaining)
-        cuts[cat] = round(cut, 2)
-        remaining -= cut
+        # Adaptive cut % (higher pressure → higher cuts)
+        if gap > avg_spend:
+            cut_percent = 0.6
+        elif gap > avg_spend * 0.5:
+            cut_percent = 0.5
+        else:
+            cut_percent = 0.3
+
+        cut = min(amount * cut_percent, remaining)
+
+        if cut > 0:
+            cuts[cat] = round(cut, 2)
+            remaining -= cut
 
         if remaining <= 0:
             break
 
+    # -----------------------------
+    # FALLBACK: ensure at least some cuts
+    # -----------------------------
+    if not cuts and not category_spend.empty:
+        for cat, amount in category_spend.items():
+            cuts[cat] = round(amount * 0.2, 2)
+
+    # -----------------------------
+    # FINAL RESPONSE
+    # -----------------------------
     return {
         "required_monthly_savings": round(required, 2),
         "current_monthly_spend": round(avg_spend, 2),
         "suggested_cuts": cuts,
-        "remaining_gap": round(remaining, 2)
+        "remaining_gap": round(max(0, remaining), 2),
+        "message": "Cut suggestions generated"
     }
 
 
 # -----------------------------
-# FINANCIAL HEALTH SCORE
+# HEALTH SCORE
 # -----------------------------
 def health_score(df, income):
     df = preprocess(df)
@@ -202,7 +275,6 @@ def health_score(df, income):
     volatility = monthly.std().sum()
     score += max(0, 30 - volatility * 0.01)
 
-    # Penalty
     if savings < 0:
         score -= 20
 
