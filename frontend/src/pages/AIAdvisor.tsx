@@ -34,7 +34,7 @@ interface Message {
 }
 
 const suggestedQuestions = [
-  "How can I improve my credit score?",
+  "How can I improve my debit score?",
   "What's the best way to pay off my debt?",
   "Should I invest in stocks or bonds?",
   "How much should I save for retirement?",

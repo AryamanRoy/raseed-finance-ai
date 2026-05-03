@@ -80,7 +80,7 @@ const ExpenseTracker: React.FC = () => {
     if (!hasData) return [];
     const monthTransactions = getTransactionsForMonth(transactions, getMostRecentMonth.month, getMostRecentMonth.year);
     return monthTransactions
-      .filter((t) => t.transactionType === 'credit')
+      .filter((t) => t.transactionType === 'debit')
       .map(t => ({
         id: t.id,
         date: t.date,
@@ -446,8 +446,8 @@ const ExpenseTracker: React.FC = () => {
                     disabled={!!editingExpense}
                   >
                     <MenuItem value="Cash">Cash</MenuItem>
-                    <MenuItem value="Credit Card">Credit Card</MenuItem>
-                    <MenuItem value="Debit Card">Debit Card</MenuItem>
+                    <MenuItem value="debit Card">debit Card</MenuItem>
+                    <MenuItem value="credit Card">credit Card</MenuItem>
                     <MenuItem value="Bank Transfer">Bank Transfer</MenuItem>
                     <MenuItem value="UPI">UPI</MenuItem>
                     <MenuItem value="Net Banking">Net Banking</MenuItem>

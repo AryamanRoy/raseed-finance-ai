@@ -57,13 +57,13 @@ const FinancialInsights: React.FC = () => {
 
   const income = useMemo(() => {
     return monthTransactions
-      .filter((t) => t.transactionType === 'debit')
+      .filter((t) => t.transactionType === 'credit')
       .reduce((sum, t) => sum + t.amount, 0);
   }, [monthTransactions]);
 
   const expenses = useMemo(() => {
     return monthTransactions
-      .filter((t) => t.transactionType === 'credit')
+      .filter((t) => t.transactionType === 'debit')
       .reduce((sum, t) => sum + t.amount, 0);
   }, [monthTransactions]);
 
@@ -71,7 +71,7 @@ const FinancialInsights: React.FC = () => {
   const categoryTotals = useMemo(() => {
     const categoryMap = new Map<string, number>();
     monthTransactions
-      .filter((t) => t.transactionType === 'credit')
+      .filter((t) => t.transactionType === 'debit')
       .forEach(txn => {
         const current = categoryMap.get(txn.category) || 0;
         categoryMap.set(txn.category, current + txn.amount);

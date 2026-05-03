@@ -262,7 +262,7 @@ const Index = () => {
           </Typography>
           <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center', mb: 3, flexWrap: 'wrap' }}>
             <Chip label="Free Trial" sx={{ bgcolor: 'success.main', color: 'white' }} />
-            <Chip label="No Credit Card Required" sx={{ bgcolor: 'info.main', color: 'white' }} />
+            <Chip label="No debit Card Required" sx={{ bgcolor: 'info.main', color: 'white' }} />
             <Chip label="Cancel Anytime" sx={{ bgcolor: 'warning.main', color: 'white' }} />
           </Box>
           <Button

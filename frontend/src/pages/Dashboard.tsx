@@ -54,13 +54,13 @@ const Dashboard: React.FC = () => {
 
   const income = useMemo(() => {
     return monthTransactions
-      .filter((t) => t.transactionType === 'debit')
+      .filter((t) => t.transactionType === 'credit')
       .reduce((sum, t) => sum + t.amount, 0);
   }, [monthTransactions]);
 
   const expenses = useMemo(() => {
     return monthTransactions
-      .filter((t) => t.transactionType === 'credit')
+      .filter((t) => t.transactionType === 'debit')
       .reduce((sum, t) => sum + t.amount, 0);
   }, [monthTransactions]);
 
@@ -68,7 +68,7 @@ const Dashboard: React.FC = () => {
 
   // Category breakdown
   const expenseTransactions = useMemo(() => {
-    return monthTransactions.filter((t) => t.transactionType === 'credit');
+    return monthTransactions.filter((t) => t.transactionType === 'debit');
   }, [monthTransactions]);
 
   const categoryData = useMemo(() => {

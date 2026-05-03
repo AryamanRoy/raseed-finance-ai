@@ -5,7 +5,7 @@ import numpy as np
 from typing import Dict, Any, Optional
 
 COMMON_DATE = ["date","txn_date","transaction_date","posted_date"]
-COMMON_AMT  = ["amount","amt","transaction_amount","debit","debit_amount","inr_amount"]
+COMMON_AMT  = ["amount","amt","transaction_amount","credit","credit_amount","inr_amount"]
 COMMON_CAT  = ["category","cat","bucket"]
 COMMON_DESC = ["description","narration","merchant","details","remarks"]
 
@@ -32,10 +32,10 @@ def normalize_expenses(df: pd.DataFrame) -> pd.DataFrame:
     cols = detect_columns(df)
     amt = cols["amount"]
     if amt is None:
-        # try debit/credit columns
+        # try credit/debit columns
         lower = {c.lower(): c for c in df.columns}
-        dr = lower.get("debit") or lower.get("debit_amount")
-        cr = lower.get("credit") or lower.get("credit_amount")
+        dr = lower.get("credit") or lower.get("credit_amount")
+        cr = lower.get("debit") or lower.get("debit_amount")
         if dr and cr:
             df["__amount"] = pd.to_numeric(df[dr], errors="coerce").fillna(0) * -1.0
             amt = "__amount"

@@ -69,7 +69,7 @@ const ExpenseVisualization: React.FC = () => {
     }
     
     const monthTransactions = getTransactionsForMonth(transactions, targetMonth, targetYear);
-    return monthTransactions.filter((t) => t.transactionType === 'credit');
+    return monthTransactions.filter((t) => t.transactionType === 'debit');
   }, [transactions, getMostRecentMonth, timeFilter, hasData]);
 
   // Category breakdown
@@ -135,7 +135,7 @@ const ExpenseVisualization: React.FC = () => {
       
       const monthTransactions = getTransactionsForMonth(transactions, month, year);
       const expenses = monthTransactions
-        .filter((t) => t.transactionType === 'credit')
+        .filter((t) => t.transactionType === 'debit')
         .reduce((sum, t) => sum + t.amount, 0);
       
       months.push({

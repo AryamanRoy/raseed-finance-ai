@@ -5,7 +5,7 @@ export interface Transaction {
   amount: number;
   category: string;
   paymentMethod: string;
-  transactionType: 'credit' | 'debit';
+  transactionType: 'debit' | 'credit';
 }
 
 export const parseCSV = (csvText: string): Transaction[] => {
@@ -23,7 +23,7 @@ export const parseCSV = (csvText: string): Transaction[] => {
 
   const dateIdx = getHeaderIndex(['date', 'transaction date', 'txn date']);
   const descIdx = getHeaderIndex(['receiver name', 'description', 'merchant', 'narration']);
-  const amountIdx = getHeaderIndex(['amount', 'transaction amount', 'debit amount']);
+  const amountIdx = getHeaderIndex(['amount', 'transaction amount', 'credit amount']);
   const paymentIdx = getHeaderIndex(['mode of transaction', 'payment method', 'mode']);
   const categoryIdx = getHeaderIndex([
     'category',
@@ -61,10 +61,10 @@ export const parseCSV = (csvText: string): Transaction[] => {
     return null;
   };
 
-  const parseTransactionType = (raw: string): 'credit' | 'debit' | null => {
+  const parseTransactionType = (raw: string): 'debit' | 'credit' | null => {
     const normalized = (raw || '').trim().toLowerCase();
-    if (normalized === 'credit') return 'credit';
     if (normalized === 'debit') return 'debit';
+    if (normalized === 'credit') return 'credit';
     return null;
   };
 
@@ -158,21 +158,21 @@ export const getTransactionsByCategory = (transactions: Transaction[]) => {
   }));
 };
 
-export const getDebitTransactions = (transactions: Transaction[]): Transaction[] =>
-  transactions.filter((txn) => txn.transactionType === 'debit');
-
-export const getCreditTransactions = (transactions: Transaction[]): Transaction[] =>
+export const getcreditTransactions = (transactions: Transaction[]): Transaction[] =>
   transactions.filter((txn) => txn.transactionType === 'credit');
+
+export const getdebitTransactions = (transactions: Transaction[]): Transaction[] =>
+  transactions.filter((txn) => txn.transactionType === 'debit');
 
 export const getTotalIncome = (transactions: Transaction[]): number => {
   return transactions
-    .filter((txn) => txn.transactionType === 'debit')
+    .filter((txn) => txn.transactionType === 'credit')
     .reduce((sum, txn) => sum + txn.amount, 0);
 };
 
 export const getTotalExpenses = (transactions: Transaction[]): number => {
   return transactions
-    .filter((txn) => txn.transactionType === 'credit')
+    .filter((txn) => txn.transactionType === 'debit')
     .reduce((sum, txn) => sum + txn.amount, 0);
 };
 

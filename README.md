@@ -69,7 +69,7 @@ GOOGLE_API_KEY=your_google_api_key_here
 ---
 
 ## 🗺️ Roadmap  
-- [ ] Multi-account integration (bank + credit card APIs)  
+- [ ] Multi-account integration (bank + debit card APIs)  
 - [ ] Predictive budgeting using AI forecasting  
 - [ ] Expense anomaly detection  
 - [ ] Mobile-responsive UI / PWA support  
