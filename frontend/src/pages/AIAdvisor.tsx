@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ReactMarkdown from "react-markdown";
 import {
   Box,
   Card,
@@ -228,9 +229,19 @@ const AIAdvisor: React.FC = () => {
                         borderColor: 'divider',
                       }}
                     >
-                      <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
-                        {message.content}
-                      </Typography>
+
+                        <Box
+                          sx={{
+                            '& p': { margin: 0 },
+                            '& ul': { paddingLeft: '20px', margin: 0 },
+                            '& li': { marginBottom: '4px' },
+                            '& strong': { fontWeight: 600 },
+                          }}
+                        >
+                          <ReactMarkdown>
+                            {message.content}
+                          </ReactMarkdown>
+                        </Box>
                       <Typography
                         variant="caption"
                         sx={{
